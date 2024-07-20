@@ -41,16 +41,16 @@ const Footer = () => {
                                 <LocalPhoneIcon /> <span>+123 4567 890</span>
                             </li>
                             <li className="footer__contact">
-                                <EmailIcon /> <span>shop@shema.com</span>
+                                <EmailIcon /> <span>sstyles@gmail.com</span>
                             </li>
                             <li className="footer__contact">
-                                <LocationOnIcon /> <span>Addis Ababa, Ethiopia</span>
+                                <LocationOnIcon /> <span>USA</span>
                             </li>
                         </ul>
                     </div>
                     <div className="footer__social__link__container">
                         <div className="footer__social__link__header">
-                            <h1>Stay Connected</h1>
+                            <h1>KEEP IN TOUCH</h1>
                         </div>
                     <ul className="footer__social__links">
                             <li className="social__link">
@@ -73,11 +73,9 @@ const Footer = () => {
                 </div>
                 <div className="fotter__copyright__container">
                     <ul className='nav'>
-                        <li className="footer__copyright">©2022 Saloni Styles  |</li>
-                        <li className="footer__terms__condition"> | Terms & Condition |</li>
-                        <li className="footer__privacy__policy">| Privacy Policy |</li>
-                        <li className="footer__privacy__policy">| Made by S & S |</li>
-
+                        <li className="footer__copyright inline">&copy; 2024 S Styles  |</li>
+                        <li className="footer__terms__condition inline"> Terms & Condition |</li>
+                        <li className="footer__privacy__policy inline"> Privacy Policy</li>
                     </ul>
                      </div>
             </div>
