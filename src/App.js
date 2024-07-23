@@ -4,7 +4,10 @@ import NavBar from './customer/component/navbar/NavigationBar';
 import HomePage from './customer/Pages/HomePage';
 import Footer from './customer/component/Footer/footer';
 import Product from './customer/component/Product/Product';
+import dotenv from 'dotenv';
+dotenv.config();
 
+import express from 'express';
 
 function App() {
   return (
