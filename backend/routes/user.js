@@ -1,30 +1,32 @@
 import express from 'express';
 import User from '../models/userModel.js'
+import createUser from '../controllers/userController.js'
 
 const router = express.Router()
 
 router.get('/', (req, res) => {
-    res.json({msg: 'a dummy dashboard'})
+    res.json({msg: 'a dummy dashboard'});
 })
 
 router.get('/login', (req, res) => {
-    res.json({msg: 'Login'})
+    res.render('login');
+    res.json({msg: 'Login'});
 })
 
-router.get('/register', (req, res) => {
-    res.json({msg: 'register'})
+router.get('/logout', (req, res) => {
+    // handle with passport
+    res.send({msg: 'Logout'});
 })
 
-router.post('/registration', async (req, res) => {
-    const { firstName, lastName } = req.body
-
-    try {
-        const user = await User.create({firstName, lastName })
-        res.status(200).json(user)
-    } catch (error) {
-        res.status(400).json({error: error.message})
-
-    }
+router.get('/google', (req, res) => {
+    //handle with passport
+    res.send('logging in with google');
 })
+
+router.get('/signin', (req, res) => {
+    res.render('LoginPage');
+})
+
+router.post('/registration', createUser)
 
 export default router;
