@@ -4,6 +4,7 @@ dotenv.config();
 
 import routes from './routes/user.js';
 import mongoose from 'mongoose';
+import passportSetup from './config/passport-setup.js';
 
 //express app
 const app = express();
@@ -13,11 +14,12 @@ app.use(express.json())
 
 app.use((req, res, next) => {
     console.log(req.path, req.method);
-    next()
+    next();
 })
 
 //routes
 app.use('/auth', routes);
+
 
 //connect to db
 mongoose.connect(process.env.MONG_URI)
