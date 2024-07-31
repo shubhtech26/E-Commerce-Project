@@ -1,7 +1,24 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import NavBar from '../component/navbar/NavigationBar';
 
+
 const LoginPage = () => {
+    { /* TODO const[ABC, setABC] = useState(null)
+
+    useEffect(() => {
+        const fetchABC = async () => {
+            const response = await fetch('/user/login')
+            const json = await response.json()
+
+            if (response.ok) {
+                setABC(json)
+            }
+        }
+
+        fetchABC()
+    }, []) */}
+
+
     return ( 
         <div>
             <section class="bg-gray-50 dark:bg-gray-900">

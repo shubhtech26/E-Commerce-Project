@@ -4,10 +4,10 @@ import mongoose from 'mongoose';
 const { Schema }= mongoose;
 
 const userSchema = new Schema({
-    // userid : {
-    //     type: Number,
-    //     required: true
-    // },
+    userid : {
+        type: Number,
+        required: true
+    },
     firstName : {
         type: String,
         required: true
@@ -16,34 +16,34 @@ const userSchema = new Schema({
         type: String,
         required: true
      },
-    // gender : {
-    //     type: Enumerator,
-    //     required: true
-    // },
-    // dob : {
-    //     type: Date,
-    //     required: true
-    // },
-    // email : {
-    //     type: Email,
-    //     required: true
-    // },
-    // mobile : {
-    //     type: Number,
-    //     required: true
-    // },
-    // address : {
-    //     type: String,
-    // },
-    // review : {
-    //     type: String,
-    // },
-    // favourites : {
-    //     type: String,
-    // },
-    // cardDetails : {
-    //     type: Number,
-    // },
+    gender : {
+        type: Enumerator,
+        required: true
+    },
+    dob : {
+        type: Date,
+        required: true
+    },
+    email : {
+        type: Email,
+        required: true
+    },
+    mobile : {
+        type: Number,
+        required: true
+    },
+    address : {
+        type: String,
+    },
+    review : {
+        type: String,
+    },
+    favourites : {
+        type: String,
+    },
+    cardDetails : {
+        type: Number,
+    },
 
 }, { timestamps: true})
 
