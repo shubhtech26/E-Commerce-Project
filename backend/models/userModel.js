@@ -1,31 +1,28 @@
 
 import mongoose from 'mongoose';
 
-const { Schema }= mongoose;
+const { Schema } = mongoose;
+
+const genderEnum = ['Male', 'Female', 'Other'];
 
 const userSchema = new Schema({
-    userid : {
-        type: Number,
-        required: true
-    },
     firstName : {
         type: String,
         required: true
     },
     lastName : {
         type: String,
-        required: true
      },
     gender : {
-        type: Enumerator,
-        required: true
+        type: String,
+        enum: genderEnum,
     },
     dob : {
         type: Date,
-        required: true
     },
     email : {
-        type: Email,
+        type: String,
+        match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.'],
         required: true
     },
     mobile : {
@@ -43,6 +40,12 @@ const userSchema = new Schema({
     },
     cardDetails : {
         type: Number,
+    },
+    username : {
+        type: String
+    },
+    googleId : {
+        type: String
     },
 
 }, { timestamps: true})

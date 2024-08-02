@@ -2,9 +2,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import routes from './routes/user.js';
+import routes from './routes/auth.js';
+import profileRoutes from './routes/profile.js';
 import mongoose from 'mongoose';
 import passportSetup from './config/passport-setup.js';
+import cookieSession from'cookie-session';
+import passport from 'passport';
 
 //express app
 const app = express();
@@ -15,11 +18,19 @@ app.use(express.json())
 app.use((req, res, next) => {
     console.log(req.path, req.method);
     next();
-})
+});
 
-//routes
-app.use('/auth', routes);
 
+//set up session cookies
+app.use(cookieSession({
+    // maxAge: a day in milliesec 
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: [process.env.SESSION_COOKIEKEY]
+}));
+
+// initialzise passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 //connect to db
 mongoose.connect(process.env.MONG_URI)
@@ -32,6 +43,14 @@ mongoose.connect(process.env.MONG_URI)
     .catch((error) => {
         console.log(error)
     })
+
+// set up routes
+app.use('/auth', routes);
+app.use('/profile', profileRoutes);
+
+app.get('/', (req, res) => {
+    res.render('HomePage', { user: req.user});
+});
 
 
 
