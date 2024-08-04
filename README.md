@@ -72,3 +72,20 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+
+We are using Ports and connecting through proxy (check in frontend package.json)
+
+PORT - 3000 (Frontend)
+PORT - 4000 (Backend)
+
+
+
+Some of the issues encountered while developing this project:
+
+1. req.session.regenerate(function(err) {
+               ^ TypeError: req.session.regenerate is not a function
+
+    https://stackoverflow.com/questions/72375564/typeerror-req-session-regenerate-is-not-a-function-using-passport
