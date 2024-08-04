@@ -14,7 +14,6 @@ const app = express();
 
 //middleware
 app.use(express.json())
-
 app.use((req, res, next) => {
     console.log(req.path, req.method);
     next();
@@ -23,8 +22,7 @@ app.use((req, res, next) => {
 
 //set up session cookies
 app.use(cookieSession({
-    // maxAge: a day in milliesec 
-    maxAge: 24 * 60 * 60 * 1000,
+    maxAge: 24 * 60 * 60 * 1000, // maxAge: a day in milliesec 
     keys: [process.env.SESSION_COOKIEKEY]
 }));
 
@@ -33,7 +31,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //connect to db
-mongoose.connect(process.env.MONG_URI)
+mongoose.connect(process.env.MONG_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         //listen to request
         app.listen(process.env.PORT, () => {
@@ -47,9 +45,8 @@ mongoose.connect(process.env.MONG_URI)
 // set up routes
 app.use('/auth', routes);
 app.use('/profile', profileRoutes);
-
 app.get('/', (req, res) => {
-    res.render('HomePage', { user: req.user});
+    // TODO res.render('HomePage', { user: req.user});
 });
 
 

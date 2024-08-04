@@ -22,12 +22,10 @@ const userSchema = new Schema({
     },
     email : {
         type: String,
-        match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.'],
-        required: true
+        match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.']
     },
     mobile : {
-        type: Number,
-        required: true
+        type: Number
     },
     address : {
         type: String,
@@ -45,6 +43,9 @@ const userSchema = new Schema({
         type: String
     },
     googleId : {
+        type: String
+    },
+    image : {
         type: String
     },
 
