@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './customer/Pages/LoginPage';
 import RegistrationPage from './customer/Pages/RegistrationPage';
 import ProfilePage from './customer/Pages/ProfilePage';
-import ProductDetail from './customer/component/Product/ProductDetail'
+import ProductDetail from './customer/component/ProductDetails/ProductDetail'
 
 
 function App() {

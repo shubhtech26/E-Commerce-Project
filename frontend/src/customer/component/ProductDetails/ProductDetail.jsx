@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ShoppingCartOutlined, FavoriteBorder, ShoppingBagOutlined, Favorite } from '@mui/icons-material';
-import productData from './ProductData'; // Adjusted import to match the filename
+import productData from './ProductData'; 
 
 const ProductDetail = () => {
     const [inCart, setInCart] = useState(false);

@@ -1,13 +1,27 @@
 import React from 'react';
+import "./ProductCard.css"
 
-const ProductCard=() =>
-{
-    return(
+
+const ProductCard = ({product}) => {
+  return (
+    <div className='productCard w-[15rem] m-3 transition-all cursor-poitner'>
+      {/* Product Image */}
+      <div className='h-[20rem]'>
+        <img className='h-full w-full object-cover object-left-top' src={product.imageUrl} alt=""/>
+      </div>
+      {/* Product Details */}
+      <div className='textPart bg-white p-3'>
         <div>
-            <h1>Product Page</h1>
-            <p>This is the product page</p>
+          <p className='font-bold opacity-60'>{product.brand}</p>
+          <p>{product.title} </p>
         </div>
-    )
+        <div className='flex items-center space-x-z'>
+          <p className='font-semibold'>₹ {product.discountedPrice}</p>
+          <p className='line-through opacity-50'>₹ {product.price}</p>
+          <p className='text-green-600 font-semibold'>{product.discountPersent}% Off</p>
+        </div>
+      </div>
+    </div>
+  );
 }
-
 export default ProductCard;
