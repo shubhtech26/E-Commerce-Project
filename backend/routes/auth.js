@@ -5,21 +5,22 @@ import passport from 'passport';
 
 const router = express.Router();
 
-// dashboard
-router.get('/', (req, res) => {
-    res.json({msg: 'a dummy dashboard'});
-})
 
 // auth login
 router.get('/login', (req, res) => {
-    res.render('login', { user: req.user });
+    // TODO
+    //res.render('login', { user: req.user });
+    res.json({ user: req.user });
 })
 
 // auth logout
 router.get('/logout', (req, res) => {
-    // handle with passport
-    res.send({msg: 'Logout'});
-})
+    req.logout((err) => {
+        if (err) { return next(err); }
+        req.session = null; // Clear the session
+        res.send({ msg: 'Logout successful' });
+    });
+});
 
 // auth with google
 router.get('/google', passport.authenticate('google', {
@@ -27,16 +28,11 @@ router.get('/google', passport.authenticate('google', {
 }));
 
 // callback route for google to redirect
-router.get('/google/redirect', passport.authenticate('google'), (req,res) => {
-    //res.send(req.user);
-    res.redirect('/profile/');
+router.get('/google/redirect', passport.authenticate('google'), (req,res) => {  
+    res.send('YOU REACHED THE CALLBACK URI');
+    // TODO res.redirect('/profile/');
 })
 
 
-router.get('/signin', (req, res) => {
-    res.render('LoginPage');
-})
-
-router.post('/registration', createUser)
 
 export default router;

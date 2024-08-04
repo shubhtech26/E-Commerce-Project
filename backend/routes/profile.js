@@ -15,8 +15,8 @@ const authCheck = (req, res, next) => {
 
 
 router.get('/', authCheck, (req, res) => {
-    //res.send('You are logged In' + req.user.username);
-    res.render('profile', { user: req.user });
+    res.send('You are logged In' + req.user.username);
+    //TODO res.render('profile', { user: req.user });
 });
 
 export default router;

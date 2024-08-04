@@ -27,7 +27,8 @@ passport.use(
 }, (accessToken, refershToken, profile, done) => {
     //passport callback function
     console.log('passport callback fired: ');
-    console.log(profile);
+    // TODO PRINT PROFILE ID IN CONSOLE
+    //console.log(profile);
 
     //check if user already exists in database
     User.findOne({googleId: profile.id}).then((currentUser) => {
@@ -43,7 +44,8 @@ passport.use(
                 googleId: profile.id,
                 gender: profile.gender,
                 firstName: profile.name.givenName,
-                lastName: profile.name.familyName
+                lastName: profile.name.familyName,
+                image: profile._json.picture
             }).save().then((newUser) => {
                 console.log('New user created' + newUser);
                 done(null, newUser);
@@ -60,3 +62,4 @@ export default passport;
 
 // AccessToken: this is token we recieve by google
 // refreshToken: to refersh the accessToken, since its expires after some time
+// done: we call when we are done with callback function

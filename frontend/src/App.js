@@ -6,6 +6,9 @@ import Footer from './customer/component/Footer/footer';
 import Product from './customer/component/Product/Product';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './customer/Pages/LoginPage';
+import RegistrationPage from './customer/Pages/RegistrationPage';
+import ProfilePage from './customer/Pages/ProfilePage';
+import ProductDetail from './customer/component/Product/ProductDetail'
 
 
 function App() {
@@ -13,9 +16,12 @@ function App() {
     <Router>
       <NavBar />
       <Routes>
-          <Route path="/login" element={ <LoginPage /> } />
+          <Route path="/" element={ <HomePage /> } />
+          <Route path="/auth/login" element={ <LoginPage /> } />
+          <Route path="/register" element={ <RegistrationPage /> } />
+          {/* <Route path="/profile" element={ <ProfilePage /> } /> */}
+          <Route path="/product_detail" element={ <ProductDetail /> } />
       </Routes>
-      < HomePage />
       < Footer />
     </Router>
   );
