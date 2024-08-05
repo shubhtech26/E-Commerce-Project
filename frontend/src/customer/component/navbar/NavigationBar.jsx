@@ -338,26 +338,29 @@ export default function NavBar() {
 
               <div className="ml-auto flex items-center">
 
-                {/* Create Account/ Log In */}
-                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  <Link to="/auth/login" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                    Sign in
-                  </Link>
-                  <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                  <Link to="/register" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                    Create account
-                  </Link>
-                </div>
-
                 {/* Profile */}
-                <div className="ml-4 flow-root lg:ml-6">
-                  <a href="#" className="group -m-2 flex items-center p-2">
-                    <UserIcon
-                      className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:fill-gray-500"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </div>
+                <div className="ml-auto flex items-center">
+                {/* Profile Popover */}
+                <Popover className="relative">
+                  {({ open }) => (
+                    <>
+                      <PopoverButton className="group -m-2 flex items-center p-2">
+                        <UserIcon className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:fill-gray-500" aria-hidden="true" />
+                      </PopoverButton>
+                      <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 origin-top-right bg-white border border-gray-200 rounded-md shadow-lg">
+                        <div className="py-1">
+                          <Link to="/auth/login" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Sign in
+                          </Link>
+                          <Link to="/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Create account
+                          </Link>
+                        </div>
+                      </PopoverPanel>
+                    </>
+                  )}
+                </Popover>
+              </div>
 
                 {/* Wishlist */}
                 <div className="ml-4 flow-root lg:ml-6">

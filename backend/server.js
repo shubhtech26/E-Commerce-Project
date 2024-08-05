@@ -2,8 +2,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import routes from './routes/auth.js';
+import authRoutes from './routes/auth.js';
 import profileRoutes from './routes/profile.js';
+import productRoutes from './routes/product.js'
 import mongoose from 'mongoose';
 import passportSetup from './config/passport-setup.js';
 import cookieSession from'cookie-session';
@@ -43,12 +44,13 @@ mongoose.connect(process.env.MONG_URI, { useNewUrlParser: true, useUnifiedTopolo
     })
 
 // set up routes
-app.use('/auth', routes);
+app.use('/auth', authRoutes);
 app.use('/profile', profileRoutes);
 app.use('/cart', cartRoutes);
 app.get('/', (req, res) => {
     // TODO res.render('HomePage', { user: req.user});
 });
+app.use('/admin', productRoutes);
 
 
 

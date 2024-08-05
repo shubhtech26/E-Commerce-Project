@@ -1,5 +1,5 @@
 // productModel.js
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema({
   title: {
@@ -56,13 +56,7 @@ const productSchema = new mongoose.Schema({
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'categories',
-  }, 
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+}, { timestamps: true});
 
-const Product = mongoose.model('products', productSchema);
-
-module.exports = Product;
+export default mongoose.model('Product', productSchema);
