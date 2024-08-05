@@ -34,6 +34,7 @@ const navigation = {
         {
           id: 'clothing',
           name: 'Clothing',
+          href:'Clothing',
           items: [
             { name: 'Tops', href: 'Tops' },
             { name: 'Dresses', href: 'Dresses' },
