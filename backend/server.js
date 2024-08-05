@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 import passportSetup from './config/passport-setup.js';
 import cookieSession from'cookie-session';
 import passport from 'passport';
-
+import cartRoutes from './routes/cartRoutes.js';
 //express app
 const app = express();
 
@@ -45,9 +45,11 @@ mongoose.connect(process.env.MONG_URI, { useNewUrlParser: true, useUnifiedTopolo
 // set up routes
 app.use('/auth', routes);
 app.use('/profile', profileRoutes);
+app.use('/cart', cartRoutes);
 app.get('/', (req, res) => {
     // TODO res.render('HomePage', { user: req.user});
 });
+
 
 
 
