@@ -58,6 +58,24 @@ const getCartWithItems = async (cartId) => {
       throw new Error('Cart not found');
     }
 
+    // Calculate totalPrice, totalItem, and totalDiscountedPrice
+    let totalPrice = 0;
+    let totalDiscountedPrice = 0;
+    let totalItem = 0;
+
+    cart.cartItems.forEach(item => {
+      totalItem += item.quantity;
+      totalPrice += item.price * item.quantity;
+      totalDiscountedPrice += item.discountedPrice * item.quantity;
+    });
+
+    // Optionally, you can update the cart document with these values
+    cart.totalPrice = totalPrice;
+    cart.totalItem = totalItem;
+    cart.totalDiscountedPrice = totalDiscountedPrice;
+
+    await cart.save(); // Save updated cart details with calculated values
+
     console.log('Cart details:', cart);
     return cart;
   } catch (error) {
@@ -65,6 +83,8 @@ const getCartWithItems = async (cartId) => {
     throw error;
   }
 };
+
+
 
 
 export default { createCart, addItemToCart , getCartWithItems };
