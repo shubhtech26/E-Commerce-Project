@@ -23,148 +23,60 @@ const navigation = {
       name: 'Women',
       featured: [
         {
-          name: 'New Arrivals',
-          href: '#',
+          name: 'Womens Products',
+          href: 'Womens',
           imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
           imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
         },
-        {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
-        },
+      
       ],
       sections: [
         {
           id: 'clothing',
           name: 'Clothing',
+          href:'Clothing',
           items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Dresses', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Browse All', href: '#' },
+            { name: 'Tops', href: 'Tops' },
+            { name: 'Dresses', href: 'Dresses' },
+            { name: 'Pants', href: 'Pants' },
+            
           ],
         },
 
       ],
     },
     {
-      id: 'men',
+      id: 'Men',
       name: 'Men',
       featured: [
         {
           name: 'New Arrivals',
-          href: '#',
+          href: 'Mens',
           imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
           imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
         },
-        {
-          name: 'Artwork Tees',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
-          imageAlt:
-            'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
-        },
+    
       ],
       sections: [
         {
           id: 'clothing',
           name: 'Clothing',
           items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
+            { name: 'Shirt', href: 'Shirt' },
+            { name: 'Kurta', href: 'Kurta' },
+            { name: 'Jeans', href: 'Jeans' },
+       
           ],
         },
-        {
-          id: 'accessories',
-          name: 'Accessories',
-          items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
-          ],
-        },
-        {
-          id: 'brands',
-          name: 'Brands',
-          items: [
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-          ],
-        },
+       
       ],
     },
-    {
-      id: 'kids',
-      name: 'Kids',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
-        },
-        {
-          name: 'Artwork Tees',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
-          imageAlt:
-            'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
-        },
-      ],
-      sections: [
-        {
-          id: 'clothing',
-          name: 'Clothing',
-          items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
-          ],
-        },
-        {
-          id: 'accessories',
-          name: 'Accessories',
-          items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
-          ],
-        },
-        {
-          id: 'brands',
-          name: 'Brands',
-          items: [
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-          ],
-        },
-      ],
-    },
+  
   ],
   pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
+    { name: 'Company', href: 'Company' },
+    { name: 'Stores', href: 'Stores' },
+    {name:'Privacy Policy', href: 'privacy-policy'},
   ],
 }
 
@@ -426,26 +338,29 @@ export default function NavBar() {
 
               <div className="ml-auto flex items-center">
 
-                {/* Create Account/ Log In */}
-                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  <Link to = "/auth/login" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                    Sign in
-                  </Link>
-                  <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                  <Link to = "/register" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                    Create account
-                  </Link>
-                </div>
-
                 {/* Profile */}
-                <div className="ml-4 flow-root lg:ml-6">
-                  <a href="#" className="group -m-2 flex items-center p-2">
-                    <UserIcon
-                      className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:fill-gray-500"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </div>
+                <div className="ml-auto flex items-center">
+                {/* Profile Popover */}
+                <Popover className="relative">
+                  {({ open }) => (
+                    <>
+                      <PopoverButton className="group -m-2 flex items-center p-2">
+                        <UserIcon className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:fill-gray-500" aria-hidden="true" />
+                      </PopoverButton>
+                      <PopoverPanel className="absolute right-0 z-10 mt-2 w-48 origin-top-right bg-white border border-gray-200 rounded-md shadow-lg">
+                        <div className="py-1">
+                          <Link to="/auth/login" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Sign in
+                          </Link>
+                          <Link to="/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Create account
+                          </Link>
+                        </div>
+                      </PopoverPanel>
+                    </>
+                  )}
+                </Popover>
+              </div>
 
                 {/* Wishlist */}
                 <div className="ml-4 flow-root lg:ml-6">

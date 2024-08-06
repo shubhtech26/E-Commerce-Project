@@ -7,9 +7,8 @@ import Product from './customer/component/Product/Product';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './customer/Pages/LoginPage';
 import RegistrationPage from './customer/Pages/RegistrationPage';
-import ProfilePage from './customer/Pages/ProfilePage';
-import ProductDetail from './customer/component/Product/ProductDetail'
-
+import ProductDetail from './customer/component/ProductDetails/ProductDetail'
+import Checkout from './customer/component/checkout/Checkout'
 
 function App() {
   return (
@@ -21,6 +20,8 @@ function App() {
           <Route path="/register" element={ <RegistrationPage /> } />
           {/* <Route path="/profile" element={ <ProfilePage /> } /> */}
           <Route path="/product_detail" element={ <ProductDetail /> } />
+          <Route path="/checkout" element={<Checkout /> } />
+
       </Routes>
       < Footer />
     </Router>
