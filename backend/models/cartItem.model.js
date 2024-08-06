@@ -5,12 +5,12 @@ const {Schema} =  mongoose;
 const cartItemSchema = new Schema({
   cart: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'cart',
+    ref: 'Cart',
     required: false,
   },
   product: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'products',
+    ref: 'Product',
     required: false,
   },
   size: {
@@ -33,7 +33,7 @@ const cartItemSchema = new Schema({
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'users',
+    ref: 'User',
     required: false,
   },
 });

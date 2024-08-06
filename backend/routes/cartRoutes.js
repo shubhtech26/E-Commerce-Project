@@ -16,14 +16,14 @@ router.post('/create-cart', async (req, res) => {
 // Route to add an item to a cart
 router.post('/cart/:cartId/add-item', async (req, res) => {
   const { cartId } = req.params;
-  const { productId, quantity, size } = req.body;
+  const { product, quantity, size } = req.body;
 
   try {
-    if (!productId || !quantity || !size) {
-      return res.status(400).json({ message: 'Product ID, quantity, and size are required.' ,quantity,size,productId });
+    if (!product || !quantity || !size) {
+      return res.status(400).json({ message: 'Product ID, quantity, and size are required.' ,quantity,size,product });
     }
 
-    await cartController.addItemToCart(cartId, productId, quantity, size);
+    await cartController.addItemToCart(cartId, product, quantity, size);
     res.status(200).json({ message: 'Item added to cart successfully.' });
   } catch (error) {
     res.status(500).json({ message: 'Error adding item to cart', error: error.message});
