@@ -16,6 +16,7 @@ const cartItemSchema = new Schema({
   size: {
     type: String,
     required: true,
+    default: 'M',
   },
   quantity: {
     type: Number,
@@ -33,7 +34,7 @@ const cartItemSchema = new Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',
-    required: true,
+    required: false,
   },
 });
 

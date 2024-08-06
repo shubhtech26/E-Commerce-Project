@@ -35,4 +35,4 @@ const cartSchema= new Schema({
   },
 },{ timestamps: true});
 
-export default mongoose.model('cart', cartSchema);
+export default mongoose.model('Cart', cartSchema);
