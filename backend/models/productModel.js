@@ -1,7 +1,7 @@
-// productModel.js
 import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
-const productSchema = new mongoose.Schema({
+const productSchema = new Schema({
   title: {
     type: String,
     // required: true, 
@@ -39,13 +39,13 @@ const productSchema = new mongoose.Schema({
   },
   ratings: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'ratings',
     },
   ], 
   reviews: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'reviews',
     },
   ], 
@@ -54,7 +54,7 @@ const productSchema = new mongoose.Schema({
     default: 0,
   },
   category: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'categories',
   }
 }, { timestamps: true});

@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const orderItemSchema = new Schema({
  
   product: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'products',
     required: true,
   },
@@ -24,7 +24,7 @@ const orderItemSchema = new Schema({
     required: true,
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'users',
     required: true,
   },
@@ -33,6 +33,5 @@ const orderItemSchema = new Schema({
   },
 });
 
-const OrderItem = mongoose.model('orderItems', orderItemSchema);
+export default mongoose.model('OrderItem', orderItemSchema);
 
-module.exports = OrderItem;
