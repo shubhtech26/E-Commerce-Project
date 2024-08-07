@@ -4,6 +4,8 @@ dotenv.config();
 
 import routes from './routes/auth.js';
 import profileRoutes from './routes/profile.js';
+import productAdminRoutes from './routes/productAdmin.js'
+import productRoutes from './routes/product.js';
 import mongoose from 'mongoose';
 import passportSetup from './config/passport-setup.js';
 import cookieSession from'cookie-session';
@@ -48,7 +50,9 @@ app.use('/profile', profileRoutes);
 app.use('/cart', cartRoutes);
 app.get('/', (req, res) => {
     // TODO res.render('HomePage', { user: req.user});
-});
+}
+app.use('/admin', productAdminRoutes);
+app.use('/user', productRoutes)
 
 
 
