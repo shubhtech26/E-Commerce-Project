@@ -1,15 +1,15 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const orderSchema = new Schema({
 
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'users',
     // required: true,
   },
   orderItems: [{
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'orderItems',
   }],
   orderDate: {
@@ -20,7 +20,7 @@ const orderSchema = new Schema({
     type: Date,
   },
   shippingAddress: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'addresses',
   },
   paymentDetails: {
@@ -65,6 +65,5 @@ const orderSchema = new Schema({
   },
 });
 
-const Order = mongoose.model('orders', orderSchema);
+export default mongoose.model('Orders', orderSchema);
 
-module.exports = Order;
