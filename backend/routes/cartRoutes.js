@@ -4,14 +4,8 @@ import cartController from '../controllers/cartController.js';
 const router = express.Router();
 
 // Route to create a new cart
-router.post('/create-cart', async (req, res) => {
-  try {
-    const cart = await cartController.createCart();
-    res.status(201).json(cart);
-  } catch (error) {
-    res.status(500).json({ message: 'Error creating cart', error: error.message });
-  }
-});
+router.post('/create-cart', cartController.createCart);
+
 
 // Route to add an item to a cart
 router.post('/cart/:cartId/add-item', async (req, res) => {
