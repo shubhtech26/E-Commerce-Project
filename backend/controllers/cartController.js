@@ -1,16 +1,20 @@
 import Cart from '../models/cart.model.js' // Ensure the path and file extension are correct
 import CartItem from '../models/cartItem.model.js'; // Corrected the import name
 import Product from '../models/productModel.js'; // Ensure the path is correct
+import User from '../models/userModel.js'; // Ensure the path is correct
+import createCartForUser from '../services/cartService.js';
+const createCart =async (req, res) => {
+  const { userId } = req.body;  // Extract userId from request body
 
-const createCart = async () => {
+  if (!userId) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
+
   try {
-    const cart = new Cart();
-    await cart.save();
-    console.log('New cart created:', cart);
-    return cart;
+    const cart = await createCartForUser(userId);
+    res.status(201).json(cart);
   } catch (error) {
-    console.error('Error creating cart:', error);
-    throw error;  // Rethrow the error if needed
+    res.status(500).json({ message: 'Error creating cart', error: error.message });
   }
 };
 
