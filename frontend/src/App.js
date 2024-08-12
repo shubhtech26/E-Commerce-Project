@@ -21,6 +21,7 @@ function App() {
           {/* <Route path="/profile" element={ <ProfilePage /> } /> */}
           <Route path="/product_detail" element={ <ProductDetail /> } />
           <Route path="/checkout" element={<Checkout /> } />
+          <Route path="/Mens" element={ <Product/> } />
 
       </Routes>
       < Footer />

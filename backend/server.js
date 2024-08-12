@@ -4,59 +4,56 @@ dotenv.config();
 
 import routes from './routes/auth.js';
 import profileRoutes from './routes/profile.js';
-import productAdminRoutes from './routes/productAdmin.js'
+import productAdminRoutes from './routes/productAdmin.js';
 import productRoutes from './routes/product.js';
 import mongoose from 'mongoose';
 import passportSetup from './config/passport-setup.js';
-import cookieSession from'cookie-session';
+import cookieSession from 'cookie-session';
 import passport from 'passport';
 import cartRoutes from './routes/cartRoutes.js';
-//express app
+
+// Create Express app
 const app = express();
 
-//middleware
-app.use(express.json())
+// Middleware
+app.use(express.json());
+
+// Logging middleware
 app.use((req, res, next) => {
     console.log(req.path, req.method);
     next();
 });
 
-
-//set up session cookies
+// Set up session cookies
 app.use(cookieSession({
-    maxAge: 24 * 60 * 60 * 1000, // maxAge: a day in milliesec 
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
     keys: [process.env.SESSION_COOKIEKEY]
 }));
 
-// initialzise passport
+// Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-//connect to db
+// Connect to MongoDB
 mongoose.connect(process.env.MONG_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
-        //listen to request
+        // Start the server
         app.listen(process.env.PORT, () => {
-            console.log('Connected to db & Listening on port', process.env.PORT)
+            console.log('Connected to db & Listening on port', process.env.PORT);
         });
     })
     .catch((error) => {
-        console.log(error)
-    })
+        console.error('Database connection error:', error);
+    });
 
-// set up routes
+// Set up routes
 app.use('/auth', routes);
 app.use('/profile', profileRoutes);
 app.use('/cart', cartRoutes);
-app.get('/', (req, res) => {
-    // TODO res.render('HomePage', { user: req.user});
-}
 app.use('/admin', productAdminRoutes);
-app.use('/user', productRoutes)
+app.use('/user', productRoutes);
 
-
-
-
-
-
-
+// Home route
+app.get('/', (req, res) => {
+    res.send(' '); // Adjust as needed
+});
