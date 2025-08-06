@@ -1,31 +1,71 @@
 
-import './App.css';
-import NavBar from './customer/component/navbar/NavigationBar';
-import HomePage from './customer/Pages/HomePage';
-import Footer from './customer/component/Footer/footer';
-import Product from './customer/component/Product/Product';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LoginPage from './customer/Pages/LoginPage';
-import RegistrationPage from './customer/Pages/RegistrationPage';
-import ProductDetail from './customer/component/ProductDetails/ProductDetail'
-import Checkout from './customer/component/checkout/Checkout'
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Toaster } from 'react-hot-toast';
+
+// Redux Store
+import { store, persistor } from './redux/store';
+
+// Components
+import Navbar from './components/layout/Navbar/Navbar';
+import HomePage from './pages/customer/HomePage';
+import Footer from './components/layout/Footer/footer';
+import Product from './components/customer/Product/Product';
+import LoginPage from './pages/customer/LoginPage';
+import RegistrationPage from './pages/customer/RegistrationPage';
+import ProductDetail from './components/customer/Product/ProductDetail';
+import Checkout from './components/customer/Checkout/Checkout';
+import Cart from './components/customer/Cart/Cart';
+import AdminDashboard from './components/admin/Dashboard/AdminDashboard';
+
+// Styles
+import './App.css';
 
 function App() {
   return (
-    <Router>
-      <NavBar />
-      <Routes>
-          <Route path="/" element={ <HomePage /> } />
-          <Route path="/auth/login" element={ <LoginPage /> } />
-          <Route path="/register" element={ <RegistrationPage /> } />
-          {/* <Route path="/profile" element={ <ProfilePage /> } /> */}
-          <Route path="/product_detail" element={ <ProductDetail /> } />
-          <Route path="/checkout" element={<Checkout /> } />
-          <Route path="/Mens" element={ <Product/> } />
-
-      </Routes>
-      < Footer />
-    </Router>
+    <Provider store={store}>
+      <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
+        <Router>
+          <div className="min-h-screen flex flex-col">
+            <Navbar />
+            <main className="flex-grow pt-[96px]">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/auth/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegistrationPage />} />
+                <Route path="/product/:id" element={<ProductDetail />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/products/:category/*" element={<Product />} />
+                <Route path="/products" element={<Product />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+          
+          {/* Toast Notifications */}
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: '#363636',
+                color: '#fff',
+              },
+              success: {
+                duration: 3000,
+                theme: {
+                  primary: '#4aed88',
+                },
+              },
+            }}
+          />
+        </Router>
+      </PersistGate>
+    </Provider>
   );
 }
 
