@@ -1,47 +1,71 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
 import Product from '../models/productModel.js';
 import Category from '../models/categoryModel.js';
 import User from '../models/userModel.js';
+import { mens_kurta } from '../../frontend/src/assets/Mens_Kurta.js';
 
 dotenv.config();
+
+function readJson(relativePath) {
+  const absolute = path.resolve(process.cwd(), relativePath);
+  const raw = fs.readFileSync(absolute, 'utf8');
+  return JSON.parse(raw);
+}
+
+function mapItemToProduct(item, categoryId) {
+  const sizes = Array.isArray(item.size)
+    ? item.size.map(s => ({ name: s.name, quantity: Number(s.quantity || 0) }))
+    : Array.isArray(item.sizes)
+      ? item.sizes
+      : [{ name: 'M', quantity: Number(item.quantity || 10) }];
+
+  const totalQty = sizes.reduce((n, s) => n + (Number(s.quantity) || 0), 0) || Number(item.quantity || 0) || 0;
+
+  return {
+    title: item.title || item.name || 'Product',
+    description: item.description || item.title || '',
+    price: Number(item.price || 0),
+    discountedPrice: Number(item.discountedPrice || item.price || 0),
+    discountPersent: Number(item.discountPersent || 0),
+    quantity: totalQty,
+    brand: item.brand || 'House',
+    color: (item.color || '').toString().toLowerCase() || 'black',
+    sizes,
+    imageUrl: item.imageUrl || item.thumbnail || '',
+    category: categoryId
+  };
+}
 
 async function main() {
   await mongoose.connect(process.env.MONG_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-  const [mens, womens] = await Promise.all([
-    Category.findOneAndUpdate({ name: 'men' }, { name: 'men' }, { upsert: true, new: true }),
-    Category.findOneAndUpdate({ name: 'women' }, { name: 'women' }, { upsert: true, new: true })
-  ]);
+  // Create specific categories from local datasets (match Postman/leaf categories)
+  const categoryNames = ['shirt', 'men_jeans', 'women_dress', 'women_top', 'mens_kurta'];
+  const categories = {};
+  for (const name of categoryNames) {
+    const cat = await Category.findOneAndUpdate({ name }, { name }, { upsert: true, new: true });
+    categories[name] = cat._id;
+  }
 
-  const products = [
-    {
-      title: 'Men Shirt Classic',
-      description: 'Comfortable cotton shirt',
-      price: 999,
-      discountedPrice: 799,
-      discountPersent: 20,
-      quantity: 100,
-      brand: 'BrandX',
-      color: 'blue',
-      sizes: [{ name: 'S', quantity: 20 }, { name: 'M', quantity: 30 }, { name: 'L', quantity: 50 }],
-      imageUrl: 'https://via.placeholder.com/300x300',
-      category: mens._id
-    },
-    {
-      title: 'Women Dress Floral',
-      description: 'Floral summer dress',
-      price: 1499,
-      discountedPrice: 1099,
-      discountPersent: 26,
-      quantity: 80,
-      brand: 'BrandY',
-      color: 'red',
-      sizes: [{ name: 'S', quantity: 20 }, { name: 'M', quantity: 30 }, { name: 'L', quantity: 30 }],
-      imageUrl: 'https://via.placeholder.com/300x300',
-      category: womens._id
-    }
-  ];
+  let products = [];
+  {
+    // Load local JSON datasets from frontend assets (no external calls)
+    const menShirts = readJson('../frontend/src/assets/men_shirt.json');
+    const menJeans = readJson('../frontend/src/assets/men_jeans.json');
+    const womenDress = readJson('../frontend/src/assets/womens product/women_dress.json');
+    const womenTop = readJson('../frontend/src/assets/womens product/women_top.json');
+
+    products = [
+      ...menShirts.map(i => mapItemToProduct(i, categories['shirt'])),
+      ...menJeans.map(i => mapItemToProduct(i, categories['men_jeans'])),
+      ...womenDress.map(i => mapItemToProduct(i, categories['women_dress'])),
+      ...womenTop.map(i => mapItemToProduct(i, categories['women_top'])),
+      ...mens_kurta.map(i => mapItemToProduct(i, categories['mens_kurta']))
+    ];
+  }
 
   await Product.deleteMany({});
   await Product.insertMany(products);
@@ -53,7 +77,7 @@ async function main() {
     { upsert: true }
   );
 
-  console.log('Seed complete');
+  console.log(`Seed complete: inserted ${products.length} products`);
   await mongoose.disconnect();
 }
 

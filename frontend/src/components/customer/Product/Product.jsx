@@ -57,12 +57,12 @@ const Product = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [fetchedProducts, filters] = await Promise.all([
+        const [items, filtersData] = await Promise.all([
           getProducts(category),
           getFilters(category)
         ]);
-        setProducts(fetchedProducts);
-        setAvailableFilters(filters);
+        setProducts(items);
+        setAvailableFilters(filtersData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -257,7 +257,7 @@ const Product = () => {
                     ) : (
                       <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
                         {filteredProducts.map((product) => (
-                          <ProductCard key={product.id} product={product} />
+                          <ProductCard key={product._id || product.id} product={product} />
                         ))}
                       </div>
                     )}

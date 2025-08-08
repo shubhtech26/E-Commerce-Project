@@ -1,12 +1,13 @@
 import React from 'react';
 import { Disclosure } from '@headlessui/react';
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { filterOptions } from '../../data/mockProducts';
+// Backend-driven filters. The parent passes `availableFilters` from API `/api/products/filters`.
 
 const ProductFilter = ({ 
   category,
   selectedFilters = {},
   onFilterChange,
+  availableFilters = {},
   className = ''
 }) => {
   const [segment, subcategory] = (category || '').split('/');
@@ -31,8 +32,8 @@ const ProductFilter = ({
   };
 
   const getSizes = () => {
-    if (!segment || !subcategory) return [];
-    return filterOptions.size[segment]?.[subcategory] || [];
+    if (Array.isArray(availableFilters.sizes)) return availableFilters.sizes;
+    return [];
   };
 
   const isFilterSelected = (filterType, value) => {
@@ -91,19 +92,19 @@ const ProductFilter = ({
   );
 
   // Only show relevant filters
-  const availableFilters = [
-    { title: 'Price', type: 'price', options: filterOptions.price },
-    { title: 'Color', type: 'color', options: filterOptions.color },
+  const filtersList = [
+    { title: 'Price', type: 'price', options: availableFilters.priceRange || [] },
+    { title: 'Color', type: 'color', options: availableFilters.colors || [] },
     { title: 'Size', type: 'size', options: getSizes() },
-    { title: 'Brand', type: 'brand', options: filterOptions.brand },
-    { title: 'Discount', type: 'discount', options: filterOptions.discount },
-    { title: 'Rating', type: 'rating', options: filterOptions.rating }
+    { title: 'Brand', type: 'brand', options: availableFilters.brands || [] },
+    { title: 'Discount', type: 'discount', options: availableFilters.discounts || [] },
+    { title: 'Rating', type: 'rating', options: availableFilters.ratings || [] }
   ].filter(filter => filter.options && filter.options.length > 0);
 
   return (
     <form className={`${className}`}>
       <h2 className="sr-only">Product filters</h2>
-      {availableFilters.map(filter => (
+      {filtersList.map(filter => (
         <React.Fragment key={filter.type}>
           {renderFilterSection(filter.title, filter.options, filter.type)}
         </React.Fragment>

@@ -29,7 +29,12 @@ router.get('/', async (req, res) => {
 
     if (category) {
       const existCategory = await Category.findOne({ name: category });
-      if (existCategory) query = query.where('category').equals(existCategory._id);
+      if (existCategory) {
+        query = query.where('category').equals(existCategory._id);
+      } else {
+        // if category not found, return empty result consistently
+        return res.json({ items: [], pagination: { page: Number(pageNumber), limit: Number(pageSize), total: 0, totalPages: 0 } });
+      }
     }
 
     if (color) {
@@ -57,7 +62,7 @@ router.get('/', async (req, res) => {
       query = query.sort({ discountedPrice: sortDirection });
     }
 
-    const total = await Product.countDocuments(query.getQuery());
+    const total = await Product.countDocuments(query.getFilter ? query.getFilter() : query.getQuery());
     const items = await query
       .skip((Number(pageNumber) - 1) * Number(pageSize))
       .limit(Number(pageSize))
