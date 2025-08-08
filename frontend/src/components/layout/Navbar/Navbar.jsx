@@ -13,15 +13,16 @@ const categories = {
   men: {
     name: 'Men',
     items: [
-      { name: 'Shirts', href: '/products/men-shirts' },
-      { name: 'Jeans', href: '/products/men-jeans' }
+      { name: 'Shirts', href: '/products/shirt' },
+      { name: 'Jeans', href: '/products/men_jeans' },
+      { name: 'Kurtas', href: '/products/mens_kurta' }
     ]
   },
   women: {
     name: 'Women',
     items: [
-      { name: 'Tops', href: '/products/women-tops' },
-      { name: 'Dresses', href: '/products/women-dresses' }
+      { name: 'Tops', href: '/products/women_top' },
+      { name: 'Dresses', href: '/products/women_dress' }
     ]
   }
 };

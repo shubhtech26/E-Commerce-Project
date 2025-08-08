@@ -43,8 +43,10 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (product) {
-      setSelectedSize(product.sizes?.[0] || '');
-      setSelectedColor(product.colors?.[0] || '');
+      const firstSize = Array.isArray(product.sizes) ? (product.sizes[0]?.name || '') : '';
+      setSelectedSize(firstSize);
+      const colorArray = Array.isArray(product.colors) ? product.colors : (product.color ? [product.color] : []);
+      setSelectedColor(colorArray[0] || '');
     }
   }, [product]);
 
@@ -72,11 +74,13 @@ const ProductDetail = () => {
     );
   }
 
-  const discount = calculateDiscount(product.originalPrice, product.price);
-  const relatedProducts = products.filter(p => 
+  const original = product.price ?? 0;
+  const sale = product.discountedPrice ?? original;
+  const discount = calculateDiscount(original, sale);
+  const relatedProducts = Array.isArray(products) ? products.filter(p => 
     p._id !== product._id && 
-    (p.category === product.category || p.brand === product.brand)
-  ).slice(0, 4);
+    ((typeof p.category === 'object' ? p.category?._id : p.category) === (typeof product.category === 'object' ? product.category?._id : product.category) || p.brand === product.brand)
+  ).slice(0, 4) : [];
 
   const handleAddToCart = async () => {
     if (!selectedSize && product.sizes?.length > 0) {
@@ -147,13 +151,18 @@ const ProductDetail = () => {
               </button>
             </li>
             <li>
-              <button 
-                onClick={() => navigate(`/products/${product.category}`)}
-                className="text-gray-400 hover:text-gray-500 flex items-center"
-              >
-                <ChevronRightIcon className="h-4 w-4 mx-2" />
-                {product.category}
-              </button>
+              {(() => {
+                const categorySlug = typeof product.category === 'object' ? (product.category?.name || '') : (product.category || '');
+                return (
+                  <button 
+                    onClick={() => navigate(`/products/${categorySlug}`)}
+                    className="text-gray-400 hover:text-gray-500 flex items-center"
+                  >
+                    <ChevronRightIcon className="h-4 w-4 mx-2" />
+                    {categorySlug}
+                  </button>
+                );
+              })()}
             </li>
             <li className="flex items-center">
               <ChevronRightIcon className="h-4 w-4 mx-2 text-gray-400" />
@@ -167,9 +176,9 @@ const ProductDetail = () => {
           <div className="mb-8 lg:mb-0">
             <div className="relative">
               <div className="aspect-square overflow-hidden rounded-lg bg-gray-100 mb-4">
-                <img
-                  src={product.images?.[selectedImage] || '/images/placeholder.jpg'}
-                  alt={product.name}
+                 <img
+                  src={(Array.isArray(product.images) && product.images[selectedImage]) || product.imageUrl || '/logo192.png'}
+                  alt={product.title || 'Product'}
                   className="w-full h-full object-cover"
                 />
                 
@@ -193,7 +202,7 @@ const ProductDetail = () => {
               </div>
 
               {/* Thumbnail Images */}
-              {product.images?.length > 1 && (
+               {product.images?.length > 1 && (
                 <div className="flex space-x-3">
                   {product.images.map((image, index) => (
                     <button
@@ -205,7 +214,7 @@ const ProductDetail = () => {
                     >
                       <img
                         src={image}
-                        alt={`${product.name} ${index + 1}`}
+                         alt={`${product.title || 'Product'} ${index + 1}`}
                         className="w-full h-full object-cover"
                       />
                     </button>
@@ -223,7 +232,7 @@ const ProductDetail = () => {
             )}
 
             {/* Product Name */}
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.title || product.name}</h1>
 
             {/* Rating and Reviews */}
             <div className="flex items-center space-x-4 mb-6">
@@ -232,20 +241,20 @@ const ProductDetail = () => {
                 <span className="text-sm text-gray-600">({product.reviewCount} reviews)</span>
               </div>
               <span className="text-sm text-gray-600">|</span>
-              <span className={`text-sm font-medium ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
-                {product.inStock ? 'In Stock' : 'Out of Stock'}
+              <span className={`text-sm font-medium ${(product.quantity ?? 0) > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {(product.quantity ?? 0) > 0 ? 'In Stock' : 'Out of Stock'}
               </span>
             </div>
 
             {/* Price */}
             <div className="flex items-center space-x-4 mb-6">
               <span className="text-3xl font-bold text-gray-900">
-                {formatCurrency(product.price)}
+                {formatCurrency(sale)}
               </span>
-              {product.originalPrice > product.price && (
+              {original > sale && (
                 <>
                   <span className="text-lg text-gray-500 line-through">
-                    {formatCurrency(product.originalPrice)}
+                    {formatCurrency(original)}
                   </span>
                   <span className="bg-red-100 text-red-800 px-2 py-1 rounded-md text-sm font-medium">
                     {discount}% OFF
@@ -258,21 +267,21 @@ const ProductDetail = () => {
             <p className="text-gray-600 mb-6">{product.description}</p>
 
             {/* Size Selection */}
-            {product.sizes?.length > 0 && (
+            {Array.isArray(product.sizes) && product.sizes.length > 0 && (
               <div className="mb-6">
                 <h3 className="text-sm font-medium text-gray-900 mb-3">Size</h3>
                 <div className="grid grid-cols-4 gap-2">
-                  {product.sizes.map((size) => (
+                  {product.sizes.map((s) => (
                     <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
+                      key={s._id || s.name}
+                      onClick={() => setSelectedSize(s.name)}
                       className={`px-3 py-2 text-sm border rounded-md ${
-                        selectedSize === size
+                        selectedSize === s.name
                           ? 'border-indigo-600 bg-indigo-50 text-indigo-600'
                           : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      {size}
+                      {s.name}
                     </button>
                   ))}
                 </div>
@@ -280,11 +289,14 @@ const ProductDetail = () => {
             )}
 
             {/* Color Selection */}
-            {product.colors?.length > 0 && (
+            {(() => {
+              const colorArray = Array.isArray(product.colors) ? product.colors : (product.color ? [product.color] : []);
+              return colorArray.length > 0;
+            })() && (
               <div className="mb-6">
                 <h3 className="text-sm font-medium text-gray-900 mb-3">Color</h3>
                 <div className="flex space-x-3">
-                  {product.colors.map((color) => (
+                  {(Array.isArray(product.colors) ? product.colors : (product.color ? [product.color] : [])).map((color) => (
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
@@ -327,14 +339,14 @@ const ProductDetail = () => {
             <div className="space-y-4 mb-8">
               <button
                 onClick={handleAddToCart}
-                disabled={!product.inStock}
+                disabled={(product.quantity ?? 0) <= 0}
                 className={`w-full px-8 py-3 text-white font-medium rounded-md ${
-                  product.inStock
+                  (product.quantity ?? 0) > 0
                     ? 'bg-indigo-600 hover:bg-indigo-700'
                     : 'bg-gray-400 cursor-not-allowed'
                 }`}
               >
-                {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                {(product.quantity ?? 0) > 0 ? 'Add to Cart' : 'Out of Stock'}
               </button>
               
               <div className="flex space-x-3">

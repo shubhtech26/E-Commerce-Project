@@ -40,20 +40,20 @@ export const getFilters = async (category) => {
 // Apply filters to products
 export const applyFilters = (products, filters) => {
   return products.filter(product => {
-    // Price filter
     if (filters.priceRange) {
       const [min, max] = filters.priceRange;
-      if (product.price < min || product.price > max) return false;
+      const price = product.discountedPrice ?? product.price;
+      if (price < min || price > max) return false;
     }
 
-    // Size filter
-    if (filters.size && !product.sizes.includes(filters.size)) return false;
+    if (filters.size && filters.size.length) {
+      const sizeNames = Array.isArray(product.sizes) ? product.sizes.map(s => s.name) : [];
+      if (!filters.size.some(s => sizeNames.includes(s))) return false;
+    }
 
-    // Color filter
-    if (filters.color && !product.colors.includes(filters.color)) return false;
-
-    // Stock filter
-    if (filters.inStock && product.stock <= 0) return false;
+    if (filters.color) {
+      if ((product.color || '').toLowerCase() !== String(filters.color).toLowerCase()) return false;
+    }
 
     return true;
   });
@@ -65,16 +65,10 @@ export const sortProducts = (products, sortBy) => {
   
   switch (sortBy) {
     case 'price_asc':
-      sortedProducts.sort((a, b) => a.price - b.price);
+      sortedProducts.sort((a, b) => (a.discountedPrice ?? a.price) - (b.discountedPrice ?? b.price));
       break;
     case 'price_desc':
-      sortedProducts.sort((a, b) => b.price - a.price);
-      break;
-    case 'name_asc':
-      sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case 'name_desc':
-      sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
+      sortedProducts.sort((a, b) => (b.discountedPrice ?? b.price) - (a.discountedPrice ?? a.price));
       break;
     case 'stock_desc':
       sortedProducts.sort((a, b) => b.stock - a.stock);

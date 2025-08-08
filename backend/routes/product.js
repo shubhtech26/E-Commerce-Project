@@ -42,6 +42,11 @@ router.get('/', async (req, res) => {
       query = query.where('color').regex(colorRegex);
     }
 
+    if (req.query.brand) {
+      const brandRegex = new RegExp(String(req.query.brand).split(',').join('|'), 'i');
+      query = query.where('brand').regex(brandRegex);
+    }
+
     if (sizes) {
       query = query.where('sizes.name').in(sizes.split(','));
     }
@@ -77,7 +82,7 @@ router.get('/', async (req, res) => {
 // GET /api/products/:id
 router.get('/:id', async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).lean();
+    const product = await Product.findById(req.params.id).populate('category', 'name').lean();
     if (!product) return res.status(404).json({ message: 'Not found' });
     return res.json(product);
   } catch (e) {
@@ -95,9 +100,10 @@ router.get('/filters/:category?', async (req, res) => {
     }
     const colors = await Product.distinct('color', match);
     const sizes = await Product.distinct('sizes.name', match);
+    const brands = await Product.distinct('brand', match);
     const minPrice = await Product.find(match).sort({ discountedPrice: 1 }).limit(1).select('discountedPrice').lean();
     const maxPrice = await Product.find(match).sort({ discountedPrice: -1 }).limit(1).select('discountedPrice').lean();
-    return res.json({ colors, sizes, priceRange: [minPrice[0]?.discountedPrice || 0, maxPrice[0]?.discountedPrice || 0] });
+    return res.json({ colors, sizes, brands, priceRange: [minPrice[0]?.discountedPrice || 0, maxPrice[0]?.discountedPrice || 0] });
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }

@@ -26,11 +26,10 @@ const Product = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
-    price: null,
+    priceRange: null,
     size: [],
-    discount: null,
-    rating: null,
-    sortBy: 'name_asc'
+    color: null,
+    sortBy: 'price_asc'
   });
   const [availableFilters, setAvailableFilters] = useState({});
 
@@ -42,11 +41,10 @@ const Product = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const initialFilters = {
-      price: urlParams.get('price')?.split(',').map(Number),
+      priceRange: urlParams.get('price')?.split(',').map(Number),
       size: urlParams.get('size')?.split(',').filter(Boolean) || [],
-      discount: urlParams.get('discount') === 'true',
-      rating: Number(urlParams.get('rating')) || null,
-      sortBy: urlParams.get('sortBy') || 'name_asc'
+      color: urlParams.get('color') || null,
+      sortBy: urlParams.get('sortBy') || 'price_asc'
     };
 
     setFilters(initialFilters);

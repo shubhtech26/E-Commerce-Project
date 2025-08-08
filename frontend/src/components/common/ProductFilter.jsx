@@ -93,12 +93,10 @@ const ProductFilter = ({
 
   // Only show relevant filters
   const filtersList = [
-    { title: 'Price', type: 'price', options: availableFilters.priceRange || [] },
+    { title: 'Price', type: 'priceRange', options: availableFilters.priceRange ? [`${availableFilters.priceRange[0]} - ${availableFilters.priceRange[1]}`] : [] },
     { title: 'Color', type: 'color', options: availableFilters.colors || [] },
     { title: 'Size', type: 'size', options: getSizes() },
-    { title: 'Brand', type: 'brand', options: availableFilters.brands || [] },
-    { title: 'Discount', type: 'discount', options: availableFilters.discounts || [] },
-    { title: 'Rating', type: 'rating', options: availableFilters.ratings || [] }
+    { title: 'Brand', type: 'brand', options: availableFilters.brands || [] }
   ].filter(filter => filter.options && filter.options.length > 0);
 
   return (

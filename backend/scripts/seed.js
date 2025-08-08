@@ -22,14 +22,23 @@ function mapItemToProduct(item, categoryId) {
       ? item.sizes
       : [{ name: 'M', quantity: Number(item.quantity || 10) }];
 
-  const totalQty = sizes.reduce((n, s) => n + (Number(s.quantity) || 0), 0) || Number(item.quantity || 0) || 0;
+  let totalQty = sizes.reduce((n, s) => n + (Number(s.quantity) || 0), 0);
+  if (!totalQty) totalQty = Number(item.quantity || 50);
+
+  // Normalize prices to 2-digit realistic values
+  const rawPrice = Number(item.price || 99);
+  const rawSale = Number(item.discountedPrice || rawPrice);
+  const normalize = (p) => Math.min(99, Math.max(29, Math.round(p / 10)));
+  const sale = normalize(rawSale);
+  const price = Math.min(99, Math.max(sale + 5, normalize(rawPrice)));
+  const discountPersent = Math.max(0, Math.round(((price - sale) / price) * 100));
 
   return {
     title: item.title || item.name || 'Product',
     description: item.description || item.title || '',
-    price: Number(item.price || 0),
-    discountedPrice: Number(item.discountedPrice || item.price || 0),
-    discountPersent: Number(item.discountPersent || 0),
+    price,
+    discountedPrice: sale,
+    discountPersent,
     quantity: totalQty,
     brand: item.brand || 'House',
     color: (item.color || '').toString().toLowerCase() || 'black',
