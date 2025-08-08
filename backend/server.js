@@ -7,16 +7,18 @@ import profileRoutes from './routes/profile.js';
 import productAdminRoutes from './routes/productAdmin.js';
 import productRoutes from './routes/product.js';
 import mongoose from 'mongoose';
-import passportSetup from './config/passport-setup.js';
 import cookieSession from 'cookie-session';
-import passport from 'passport';
+import cors from 'cors';
+import seedRoutes from './routes/seed.js';
 import cartRoutes from './routes/cartRoutes.js';
+import orderRoutes from './routes/orders.js';
 
 // Create Express app
 const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cors({ origin: [/localhost:\d+$/], credentials: true }));
 
 // Logging middleware
 app.use((req, res, next) => {
@@ -30,9 +32,7 @@ app.use(cookieSession({
     keys: [process.env.SESSION_COOKIEKEY]
 }));
 
-// Initialize Passport
-app.use(passport.initialize());
-app.use(passport.session());
+// Remove Passport Google OAuth (no external providers)
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONG_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -46,14 +46,14 @@ mongoose.connect(process.env.MONG_URI, { useNewUrlParser: true, useUnifiedTopolo
         console.error('Database connection error:', error);
     });
 
-// Set up routes
-app.use('/auth', routes);
-app.use('/profile', profileRoutes);
-app.use('/cart', cartRoutes);
-app.use('/admin', productAdminRoutes);
-app.use('/user', productRoutes);
+// Set up routes with /api prefix
+app.use('/api/auth', routes);
+app.use('/api/profile', profileRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/admin/products', productAdminRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/seed', seedRoutes);
 
-// Home route
-app.get('/', (req, res) => {
-    res.send(' '); // Adjust as needed
-});
+// Health
+app.get('/api/health', (_req, res) => res.json({ ok: true }));

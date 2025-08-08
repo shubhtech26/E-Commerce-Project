@@ -1,7 +1,7 @@
-import Cart from '../models/cart.model.js' // Ensure the path and file extension are correct
-import CartItem from '../models/cartItem.model.js'; // Corrected the import name
-import Product from '../models/productModel.js'; // Ensure the path is correct
-import User from '../models/userModel.js'; // Ensure the path is correct
+import Cart from '../models/cart.model.js';
+import CartItem from '../models/cartItem.model.js';
+import Product from '../models/productModel.js';
+import User from '../models/userModel.js';
 import cartService from '../services/cartService.js';
 
 
@@ -22,23 +22,14 @@ const createCart =async (req, res) => {
 
 const addCartItem = async (req, res) => {
   try {
-    const { productId } = req.params; // Extract productId from URL params
-    const { userId } = req.body; // Extract userId from request body
-
-    if (!userId) {
-      return res.status(400).json({ message: 'User ID is required' });
-    }
-
-    if (!productId) {
-      return res.status(400).json({ message: 'Product ID is required' });
-    }
-
-    // Call the service function to add the item to the cart
-    const result = await cartService.addCartItemService(userId, productId);
-    res.status(200).json({ message: result });
+    const { userId, productId, quantity = 1, size } = req.body;
+    if (!userId || !productId) return res.status(400).json({ message: 'userId and productId required' });
+    await cartService.createCartForUser(userId);
+    await cartService.addCartItemService(userId, productId);
+    const cart = await cartService.findUserCart(userId);
+    return res.json({ items: cart.cartItems, totalItems: cart.totalItem, totalPrice: cart.totalPrice });
   } catch (error) {
-    console.error('Error adding item to cart:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -59,4 +50,4 @@ const addCartItem = async (req, res) => {
 
 
 
-export default { createCart, addCartItem,findUserCart};
+export default { createCart, addCartItem, findUserCart: cartService.findUserCart };

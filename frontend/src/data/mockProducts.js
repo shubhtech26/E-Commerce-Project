@@ -158,43 +158,25 @@ export const mockProducts = {
 };
 
 export const getProductsByCategory = (category) => {
-  if (!category) return [];
-  
-  const parts = category.split('/').filter(Boolean);
+  const parts = category.split('/');
   let products = mockProducts;
   
-  // Handle root categories (men, women)
-  if (parts.length === 1) {
-    const rootCategory = products[parts[0]];
-    if (!rootCategory) return [];
-    
-    // Flatten all subcategories
-    return Object.values(rootCategory)
-      .flatMap(subcategory => 
-        Array.isArray(subcategory) ? subcategory : 
-        typeof subcategory === 'object' ? Object.values(subcategory).flat() : 
-        []
-      );
-  }
-  
-  // Navigate through the category path
-  for (let i = 0; i < parts.length; i++) {
-    const part = parts[i];
-    if (!products[part]) {
+  for (const part of parts) {
+    if (products[part]) {
+      products = products[part];
+    } else {
       return [];
     }
-    products = products[part];
-    
-    // If we've reached an array of products, return it
-    if (Array.isArray(products)) {
-      return products;
-    }
   }
   
-  // If we've reached an object containing product arrays (like shoes subcategories)
+  // If the result is an array, return it
+  if (Array.isArray(products)) {
+    return products;
+  }
+  
+  // If it's an object (like shoes subcategories), flatten all products into an array
   if (typeof products === 'object') {
-    return Object.values(products)
-      .flatMap(subcategory => Array.isArray(subcategory) ? subcategory : []);
+    return Object.values(products).flat();
   }
   
   return [];

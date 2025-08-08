@@ -16,6 +16,7 @@ import Product from './components/customer/Product/Product';
 import LoginPage from './pages/customer/LoginPage';
 import RegistrationPage from './pages/customer/RegistrationPage';
 import ProductDetail from './components/customer/Product/ProductDetail';
+
 import Checkout from './components/customer/Checkout/Checkout';
 import Cart from './components/customer/Cart/Cart';
 import AdminDashboard from './components/admin/Dashboard/AdminDashboard';
