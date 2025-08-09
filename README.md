@@ -218,6 +218,40 @@ Comprehensive mock data included for:
 - **Reviews** - Product reviews and ratings
 - **Admin Stats** - Dashboard analytics data
 
+### Sample database JSON for quick testing
+
+We publish a small but realistic dataset you can import directly. It lives in `backend/seed-data/products.json` and matches the backend schema. Example product:
+
+```json
+{
+  "title": "Classic Cotton Tee",
+  "description": "Soft, breathable cotton t‑shirt.",
+  "price": 999,
+  "discountedPrice": 799,
+  "discountPersent": 20,
+  "quantity": 120,
+  "brand": "House",
+  "color": "black",
+  "sizes": [{ "name": "S", "quantity": 20 }, { "name": "M", "quantity": 30 }],
+  "imageUrl": "https://via.placeholder.com/600x600.png?text=Classic+Cotton+Tee",
+  "categorySlug": "t-shirts"
+}
+```
+
+Import options:
+
+```bash
+# Option 1: seed via script (recommended)
+cd E-Commerce-Project/backend
+node scripts/seed.js
+
+# Option 2: POST the JSON as admin (auth token required)
+curl -X POST http://localhost:4000/api/admin/products \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer <ADMIN_TOKEN>' \
+  -d @backend/seed-data/products.json
+```
+
 ## 🎯 Production Ready Features
 
 ### **Performance**
