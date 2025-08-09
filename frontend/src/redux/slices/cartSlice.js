@@ -94,7 +94,8 @@ const cartSlice = createSlice({
           quantity,
           size,
           color,
-          price: product.price,
+          // Always store the effective sale price (discounted if present)
+          price: (product.discountedPrice ?? product.price),
         });
       }
       
