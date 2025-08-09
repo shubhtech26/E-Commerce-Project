@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   ShoppingBagIcon,
   UserIcon,
@@ -31,7 +31,8 @@ const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { isAuthenticated, user } = useAuth();
+  const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuth();
   const { totalItems } = useCart();
 
   // Close dropdown when clicking outside or pressing escape
@@ -59,6 +60,14 @@ const Navbar = () => {
 
   const handleDropdownClick = (category) => {
     setActiveDropdown(activeDropdown === category ? null : category);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } finally {
+      navigate('/auth/login');
+    }
   };
 
   return (
@@ -138,10 +147,18 @@ const Navbar = () => {
               {/* User Menu */}
               <div className="relative">
                 {isAuthenticated ? (
-                  <Link to="/profile" className="flex items-center space-x-1 text-gray-700 hover:text-gray-900">
-                    <UserIcon className="h-6 w-6" />
-                    <span className="text-sm font-medium">{user?.name}</span>
-                  </Link>
+                  <div className="flex items-center space-x-4">
+                    <Link to="/profile" className="flex items-center space-x-1 text-gray-700 hover:text-gray-900">
+                      <UserIcon className="h-6 w-6" />
+                      <span className="text-sm font-medium">{user?.name || 'Profile'}</span>
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                    >
+                      Logout
+                    </button>
+                  </div>
                 ) : (
                   <div className="flex items-center space-x-4">
                     <Link
