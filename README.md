@@ -1,57 +1,46 @@
-# ShopZone - Modern E-Commerce Frontend
+# ShopZone — Complete E‑Commerce Site (MERN)
 
-A complete, production-ready React e-commerce frontend with modern UI/UX, comprehensive features, and seamless integration capabilities.
+A complete, production‑ready MERN e‑commerce site with modern UI/UX, fully local backend APIs (no external product API), MongoDB persistence, JWT auth, cart & orders, seed data, and an optional local AI bot (Ollama).
 
 ## 🚀 Features Implemented
 
-### ✅ **Core E-Commerce Features**
-- **Product Catalog** - Advanced filtering, sorting, pagination, and search
-- **Product Details** - Image gallery, reviews, ratings, size/color selection
-- **Shopping Cart** - Add/remove items, quantity management, local storage
-- **Checkout Process** - Multi-step checkout with address and payment
-- **User Authentication** - Login, register, OAuth integration ready
-- **Order Management** - Order history, tracking, and status updates
+### ✅ Core E‑Commerce Features
+- Product Catalog – Filtering, sorting, pagination, search
+- Product Details – Gallery, variants (size/color), stock status
+- Shopping Cart – Add/remove/update, pricing totals
+- Checkout – Multi‑step flow (address, summary)
+- Authentication – Register/login via JWT, profile update, change password
+- Orders – Create order, view my orders, order details
 
-### ✅ **Modern UI/UX**
+### ✅ Modern UI/UX
 - **Responsive Design** - Mobile-first approach with Tailwind CSS
 - **Interactive Components** - Hover effects, animations, loading states
 - **Advanced Navigation** - Mega menu, search modal, breadcrumbs
 - **Professional Layout** - Clean, modern design with consistent spacing
 
-### ✅ **Technical Excellence**
-- **Redux State Management** - Centralized state with Redux Toolkit
-- **Component Architecture** - Reusable, maintainable components
-- **Mock Data Integration** - Comprehensive mock data for development
-- **Error Handling** - Toast notifications and error boundaries
-- **Performance Optimized** - Lazy loading and optimized rendering
+### ✅ Technical Excellence
+- Redux Toolkit state management
+- Service layer (Axios) with interceptors
+- Error handling, notifications, and clean code structure
+- Seed script + published JSON for instant testing
 
-### ✅ **Admin Panel**
-- **Dashboard** - Analytics, sales charts, recent orders
-- **Product Management** - CRUD operations for products
-- **Order Management** - Process orders, update status
-- **Customer Management** - View customer data and analytics
+### ✅ Admin (APIs ready)
+- Admin product CRUD (create/update/delete)
+- (Extensible) hooks for order and customer management
 
-## 🏗️ Project Structure
+## 🏗️ Project Structure (Monorepo)
 
 ```
-src/
-├── components/           # Reusable UI components
-│   ├── admin/           # Admin panel components
-│   ├── customer/        # Customer-facing components
-│   ├── common/          # Shared components
-│   └── layout/          # Layout components (header, footer)
-├── pages/               # Page components
-│   ├── customer/        # Customer pages
-│   └── admin/           # Admin pages
-├── redux/               # State management
-│   ├── store/           # Redux store configuration
-│   └── slices/          # Redux slices (auth, product, cart, order)
-├── services/            # API services
-├── hooks/               # Custom React hooks
-├── utils/               # Utility functions
-├── constants/           # App constants
-├── data/                # Mock data
-└── assets/              # Static assets
+E-Commerce-Project/
+├── backend/                 # Node.js + Express + MongoDB (Mongoose)
+│   ├── models/              # Product, Category, User, Cart, Order, etc.
+│   ├── routes/              # auth, products, cart, orders, admin, seed, ai
+│   ├── scripts/seed.js      # DB seeding
+│   ├── seed-data/products.json
+│   └── server.js            # Express entrypoint
+└── frontend/                # React app
+    ├── src/                 # Components, pages, redux, services, utils
+    └── vercel.json          # SPA rewrites for Vercel
 ```
 
 ## 🎯 Key Components
@@ -79,9 +68,7 @@ src/
 - Top products display
 - Quick action buttons
 
-## 🔧 State Management
-
-### **Redux Store Structure**
+## 🔧 State Management (Redux Store Shape)
 ```javascript
 {
   auth: {
@@ -122,38 +109,44 @@ src/
 - **Adaptive layouts** for all screen sizes
 - **Touch-friendly interactions** for mobile devices
 
-## 🔌 API Integration Ready
+## 🔌 Backend API (Summary)
 
-### **Service Layer Architecture**
-- Centralized API configuration with Axios
-- Error handling and interceptors
-- Mock data fallback for development
-- Easy backend integration
+Base: `http://localhost:4000/api`
 
-### **API Endpoints Structure**
-```javascript
-// Products
-GET    /api/products              // List products with filters
-GET    /api/products/:id          // Get product details
-GET    /api/products/search       // Search products
-GET    /api/products/categories   // Get categories
+### Auth
+- POST `/auth/register` – `{ firstName, lastName, email, password }`
+- POST `/auth/login` – `{ email, password }`
+- GET  `/auth/me` – current user (Bearer token)
+- POST `/auth/logout`
 
-// Cart
-GET    /api/cart                  // Get cart items
-POST   /api/cart/add              // Add item to cart
-PUT    /api/cart/items/:id        // Update cart item
-DELETE /api/cart/items/:id        // Remove cart item
+### Products (Public)
+- GET `/products` – query params: `category, brand, color, sizes, minPrice, maxPrice, minDiscount, sort, pageNumber, pageSize, q`
+- GET `/products/:id`
+- GET `/products/filters/:category?` – colors, sizes, brands, price range
 
-// Orders
-POST   /api/orders                // Create order
-GET    /api/orders                // Get user orders
-GET    /api/orders/:id            // Get order details
+### Products (Admin)
+- POST   `/admin/products`
+- PUT    `/admin/products/:id`
+- DELETE `/admin/products/:id`
 
-// Auth
-POST   /api/auth/login            // User login
-POST   /api/auth/register         // User registration
-GET    /api/auth/me               // Get current user
-```
+### Cart
+- GET    `/cart`
+- POST   `/cart/add` – `{ productId, quantity, size, color }`
+- PUT    `/cart/items/:id`
+- DELETE `/cart/items/:id`
+- DELETE `/cart/clear`
+
+### Orders
+- GET  `/orders`
+- GET  `/orders/:id`
+- POST `/orders` – create order
+
+### Seed
+- `node scripts/seed.js` (recommended) or an optional `/seed` route (if enabled)
+
+### AI (Optional, local Ollama)
+- GET  `/ai/models` – list local models
+- POST `/ai/chat` – `{ question | messages[], model?, stream? }`
 
 ## 🎨 Design System
 
@@ -192,13 +185,24 @@ npm start
 - `npm test` - Run tests
 - `npm eject` - Eject from Create React App
 
-## 🔗 Backend Integration
+## ⚙️ Environment Variables
 
-### **Environment Variables**
-```bash
+### Backend – `backend/.env`
+```
+MONG_URI=mongodb://127.0.0.1:27017/ecommerce   # or your Atlas URI
+PORT=4000
+JWT_SECRET=dev_secret
+SESSION_COOKIEKEY=dev_session
+FRONTEND_ORIGIN=http://localhost:3000
+
+# Optional (Ollama bot)
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_MODEL=llama3.1:8b
+```
+
+### Frontend – `frontend/.env`
+```
 REACT_APP_API_URL=http://localhost:4000/api
-REACT_APP_GOOGLE_CLIENT_ID=your_google_client_id
-REACT_APP_FACEBOOK_APP_ID=your_facebook_app_id
 ```
 
 ### **OAuth Integration**
@@ -208,7 +212,7 @@ The authentication system is ready for OAuth integration:
 - JWT token handling implemented
 - Automatic token refresh ready
 
-## 📊 Mock Data
+## 📊 Mock & Sample Data
 
 Comprehensive mock data included for:
 - **Products** - 8+ sample products with images, variants, reviews
@@ -217,6 +221,40 @@ Comprehensive mock data included for:
 - **Orders** - Order history with different statuses
 - **Reviews** - Product reviews and ratings
 - **Admin Stats** - Dashboard analytics data
+
+### Sample database JSON for quick testing
+
+We publish a small realistic dataset at `backend/seed-data/products.json`. It matches the schema used by the app.
+
+Minimal product object (example):
+```json
+{
+  "title": "Classic Cotton Tee",
+  "description": "Soft, breathable cotton t‑shirt.",
+  "price": 999,
+  "discountedPrice": 799,
+  "discountPersent": 20,
+  "quantity": 120,
+  "brand": "House",
+  "color": "black",
+  "sizes": [{ "name": "S", "quantity": 20 }, { "name": "M", "quantity": 30 }],
+  "imageUrl": "https://via.placeholder.com/600x600.png?text=Classic+Cotton+Tee",
+  "categorySlug": "t-shirts"
+}
+```
+
+Import options:
+```bash
+# Option 1 (recommended)
+cd E-Commerce-Project/backend
+node scripts/seed.js
+
+# Option 2 (admin token required)
+curl -X POST http://localhost:4000/api/admin/products \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer <ADMIN_TOKEN>' \
+  -d @backend/seed-data/products.json
+```
 
 ### Sample database JSON for quick testing
 
@@ -314,8 +352,8 @@ curl -X POST http://localhost:4000/api/admin/products \
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+MIT
 
 ---
 
-**Built with ❤️ using React, Redux Toolkit, Tailwind CSS, and modern web technologies.**
+Created by **Shubhendra Singh** and **Saloni Mittal**.
