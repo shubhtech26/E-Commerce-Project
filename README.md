@@ -1,6 +1,6 @@
 # ShopZone — Complete E‑Commerce Site (MERN)
 
-A complete, production‑ready MERN e‑commerce site with modern UI/UX, fully local backend APIs (no external product API), MongoDB persistence, JWT auth, cart & orders, seed data, and an optional local AI bot (Ollama).
+A complete, production‑ready MERN e‑commerce site with modern UI/UX, fully local backend APIs (no external product API), MongoDB persistence, JWT auth, cart & orders, seed data, and an local AI bot (Ollama).
 
 ## 🚀 Features Implemented
 
