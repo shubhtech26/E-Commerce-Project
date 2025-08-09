@@ -2,22 +2,14 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
+// Remove invalid reference to Navigation/Homepage to avoid runtime import of undefined object
 
 const Routers = () => {
   return (
-    <div>
-        <div>
-             <Navigation/>
-        </div>
-       <div className="">
-        <Routes>
-
-        <Route path="/" element={<Homepage/>}></Route>
-
-      </Routes>
-       </div>
-      
-    </div>
+    <Routes>
+      {/* This file is unused by App. Keep minimal valid Routes to prevent object rendering errors if imported elsewhere. */}
+      <Route path="/" element={<div />} />
+    </Routes>
   );
 };
 
