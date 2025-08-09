@@ -10,11 +10,19 @@ const ProductFilter = ({
   availableFilters = {},
   className = ''
 }) => {
-  const [segment, subcategory] = (category || '').split('/');
+  // category path can be like "men/shirt"; we don't currently use segments here
 
   const handleFilterChange = (filterType, value) => {
+    if (filterType === 'priceRange') {
+      // value is [min,max]
+      onFilterChange({
+        ...selectedFilters,
+        priceRange: value,
+      });
+      return;
+    }
+
     let newValue;
-    
     if (Array.isArray(selectedFilters[filterType])) {
       // Toggle value in array
       newValue = selectedFilters[filterType]?.includes(value)
@@ -42,8 +50,9 @@ const ProductFilter = ({
     if (Array.isArray(selectedFilters[filterType])) {
       return selectedFilters[filterType].includes(value);
     }
-    if (typeof value === 'object' && value?.value !== undefined) {
-      return selectedFilters[filterType] === value.value;
+    if (filterType === 'priceRange' && Array.isArray(value)) {
+      const current = selectedFilters.priceRange || [];
+      return current.length === 2 && current[0] === value[0] && current[1] === value[1];
     }
     return selectedFilters[filterType] === value;
   };
@@ -92,16 +101,46 @@ const ProductFilter = ({
   );
 
   // Only show relevant filters
+  // Build price buckets from range
+  const priceOptions = (() => {
+    if (!availableFilters.priceRange || availableFilters.priceRange.length !== 2) return [];
+    const [min, max] = availableFilters.priceRange;
+    const step = Math.max(1, Math.round((max - min) / 3));
+    const buckets = [
+      [min, min + step],
+      [min + step + 1, min + 2 * step],
+      [min + 2 * step + 1, max],
+    ];
+    return buckets.map(([a, b]) => ({ label: `${a} - ${b}`, value: [a, b] }));
+  })();
+
+  // Discount buckets (percentage or greater)
+  const discountOptions = [10, 20, 30, 40].map((d) => ({ label: `${d}% and above`, value: d }));
+
+  // Availability options
+  const availabilityOptions = [{ label: 'In stock only', value: true }];
+
   const filtersList = [
-    { title: 'Price', type: 'priceRange', options: availableFilters.priceRange ? [`${availableFilters.priceRange[0]} - ${availableFilters.priceRange[1]}`] : [] },
+    { title: 'Price', type: 'priceRange', options: priceOptions },
     { title: 'Color', type: 'color', options: availableFilters.colors || [] },
     { title: 'Size', type: 'size', options: getSizes() },
-    { title: 'Brand', type: 'brand', options: availableFilters.brands || [] }
+    { title: 'Brand', type: 'brand', options: availableFilters.brands || [] },
+    { title: 'Discount', type: 'discount', options: discountOptions },
+    { title: 'Availability', type: 'inStock', options: availabilityOptions }
   ].filter(filter => filter.options && filter.options.length > 0);
 
   return (
     <form className={`${className}`}>
-      <h2 className="sr-only">Product filters</h2>
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="text-sm font-semibold text-gray-900">Product filters</h2>
+        <button
+          type="button"
+          onClick={() => onFilterChange({})}
+          className="text-xs text-indigo-600 hover:text-indigo-500"
+        >
+          Clear all
+        </button>
+      </div>
       {filtersList.map(filter => (
         <React.Fragment key={filter.type}>
           {renderFilterSection(filter.title, filter.options, filter.type)}

@@ -10,7 +10,7 @@
     "dev": "nodemon server.js"
   },
   "keywords": [],
-  "author": "Saloni Mittal & Shubham",
+  "author": "Saloni Mittal & Shubhendra Singh",
   "license": "ISC",
   "dependencies": {
     "cookie-session": "^2.1.0",

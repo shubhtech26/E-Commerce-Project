@@ -97,7 +97,7 @@ export const calculateDiscount = (originalPrice, salePrice) => {
 };
 
 // Get image URL with fallback
-export const getImageUrl = (imagePath, fallback = '/images/placeholder.jpg') => {
+export const getImageUrl = (imagePath, fallback = '/logo192.png') => {
   if (!imagePath) return fallback;
   
   // If it's already a full URL, return as is

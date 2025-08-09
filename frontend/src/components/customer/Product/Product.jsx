@@ -19,18 +19,23 @@ const sortOptions = [
   { name: 'Name: Z to A', value: 'name_desc' },
 ];
 
+const DEFAULT_FILTERS = {
+  priceRange: null,
+  size: [],
+  color: null,
+  brand: [],
+  inStock: false,
+  discount: 0,
+  sortBy: 'price_asc',
+};
+
 const Product = () => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [showSort, setShowSort] = useState(false);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    priceRange: null,
-    size: [],
-    color: null,
-    sortBy: 'price_asc'
-  });
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [availableFilters, setAvailableFilters] = useState({});
 
   const navigate = useNavigate();
@@ -40,14 +45,18 @@ const Product = () => {
   // Initialize filters from URL params
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    const initialFilters = {
-      priceRange: urlParams.get('price')?.split(',').map(Number),
-      size: urlParams.get('size')?.split(',').filter(Boolean) || [],
-      color: urlParams.get('color') || null,
-      sortBy: urlParams.get('sortBy') || 'price_asc'
-    };
+    const getArray = (key) => urlParams.get(key)?.split(',').filter(Boolean) || [];
+    const priceParam = urlParams.get('priceRange') || urlParams.get('price');
+    const priceRange = priceParam ? priceParam.split(',').map(Number) : null;
+    const brand = getArray('brand');
+    const size = getArray('size');
+    const color = urlParams.get('color') || null;
+    const sortBy = urlParams.get('sortBy') || 'price_asc';
+    const inStock = ['1', 'true', 'yes'].includes((urlParams.get('inStock') || '').toLowerCase());
+    const discount = parseInt(urlParams.get('discount') || '0', 10) || 0;
 
-    setFilters(initialFilters);
+    const initial = { ...DEFAULT_FILTERS, priceRange, size, color, brand, sortBy, inStock, discount };
+    setFilters(initial);
   }, [location.search]);
 
   // Fetch products and available filters when category changes
@@ -86,16 +95,15 @@ const Product = () => {
   // Update URL when filters change
   useEffect(() => {
     const params = new URLSearchParams();
-    
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value) {
-        if (Array.isArray(value) && value.length > 0) {
-          params.set(key, value.join(','));
-        } else if (!Array.isArray(value) && value !== null) {
-          params.set(key, value.toString());
-        }
-      }
-    });
+    if (filters.priceRange && filters.priceRange.length === 2) {
+      params.set('priceRange', filters.priceRange.join(','));
+    }
+    if (filters.size && filters.size.length) params.set('size', filters.size.join(','));
+    if (filters.brand && filters.brand.length) params.set('brand', filters.brand.join(','));
+    if (filters.color) params.set('color', String(filters.color));
+    if (filters.sortBy) params.set('sortBy', String(filters.sortBy));
+    if (filters.discount && Number(filters.discount) > 0) params.set('discount', String(filters.discount));
+    if (filters.inStock) params.set('inStock', '1');
 
     const newUrl = `${location.pathname}?${params.toString()}`;
     if (newUrl !== `${location.pathname}${location.search}`) {
@@ -104,7 +112,12 @@ const Product = () => {
   }, [filters, navigate, location]);
 
   const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
+    setFilters((prev) => ({
+      ...DEFAULT_FILTERS,
+      ...prev,
+      ...newFilters,
+      sortBy: newFilters.sortBy ?? prev.sortBy ?? 'price_asc',
+    }));
   };
 
   const handleSortChange = (sortBy) => {
