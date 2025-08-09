@@ -18,7 +18,24 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors({ origin: [/localhost:\d+$/], credentials: true }));
+// Allow localhost, *.vercel.app, and optionally FRONTEND_ORIGIN
+const allowedOrigins = [/localhost:\d+$/ , /\.vercel\.app$/];
+if (process.env.FRONTEND_ORIGIN) {
+  try {
+    const escaped = process.env.FRONTEND_ORIGIN.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    allowedOrigins.push(new RegExp(escaped));
+  } catch {}
+}
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const ok = allowedOrigins.some((rx) => rx.test(origin));
+      return callback(ok ? null : new Error('Not allowed by CORS'), ok);
+    },
+    credentials: true,
+  })
+);
 
 // Logging middleware
 app.use((req, res, next) => {
