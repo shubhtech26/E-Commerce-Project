@@ -55,6 +55,25 @@ export const applyFilters = (products, filters) => {
       if ((product.color || '').toLowerCase() !== String(filters.color).toLowerCase()) return false;
     }
 
+    if (filters.brand) {
+      if (Array.isArray(filters.brand) && filters.brand.length > 0) {
+        if (!filters.brand.map(b => String(b).toLowerCase()).includes(String(product.brand || '').toLowerCase())) return false;
+      } else if (typeof filters.brand === 'string') {
+        if (String(product.brand || '').toLowerCase() !== String(filters.brand).toLowerCase()) return false;
+      }
+    }
+
+    if (filters.discount) {
+      const original = product.price ?? 0;
+      const sale = product.discountedPrice ?? original;
+      const percent = original > 0 ? Math.round(((original - sale) / original) * 100) : 0;
+      if (percent < Number(filters.discount)) return false;
+    }
+
+    if (filters.inStock) {
+      if ((product.quantity ?? 0) <= 0) return false;
+    }
+
     return true;
   });
 };
