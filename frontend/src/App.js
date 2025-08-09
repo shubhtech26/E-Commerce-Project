@@ -11,11 +11,12 @@ import { store, persistor } from './redux/store';
 // Components
 import Navbar from './components/layout/Navbar/Navbar';
 import HomePage from './pages/customer/HomePage';
-import Footer from './components/layout/Footer/footer';
+import Footer from './components/layout/Footer/footer.jsx';
 import Product from './components/customer/Product/Product';
 import LoginPage from './pages/customer/LoginPage';
 import RegistrationPage from './pages/customer/RegistrationPage';
 import ProductDetail from './components/customer/Product/ProductDetail';
+import ProfilePage from './pages/customer/ProfilePage';
 
 import Checkout from './components/customer/Checkout/Checkout';
 import Cart from './components/customer/Cart/Cart';
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/products/:category/*" element={<Product />} />
                 <Route path="/products" element={<Product />} />
