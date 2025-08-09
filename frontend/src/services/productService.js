@@ -1,208 +1,81 @@
 import api from './api';
-import { mockProducts, mockCategories } from '../data/mockData';
 
-// Use mock data for development
-const USE_MOCK_DATA = true;
-
+// Get all products with optional filters
 export const getProducts = async (filters = {}) => {
-  if (USE_MOCK_DATA) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    let filteredProducts = [...mockProducts];
-    
-    // Apply filters
-    if (filters.category) {
-      filteredProducts = filteredProducts.filter(p => p.category === filters.category);
-    }
-    if (filters.subcategory) {
-      filteredProducts = filteredProducts.filter(p => p.subcategory === filters.subcategory);
-    }
-    if (filters.search) {
-      const searchTerm = filters.search.toLowerCase();
-      filteredProducts = filteredProducts.filter(p => 
-        p.name.toLowerCase().includes(searchTerm) ||
-        p.description.toLowerCase().includes(searchTerm) ||
-        p.tags.some(tag => tag.toLowerCase().includes(searchTerm))
-      );
-    }
-    if (filters.minPrice) {
-      filteredProducts = filteredProducts.filter(p => p.price >= parseFloat(filters.minPrice));
-    }
-    if (filters.maxPrice) {
-      filteredProducts = filteredProducts.filter(p => p.price <= parseFloat(filters.maxPrice));
-    }
-    if (filters.rating) {
-      filteredProducts = filteredProducts.filter(p => p.rating >= parseFloat(filters.rating));
-    }
-    
-    // Apply sorting
-    if (filters.sortBy) {
-      switch (filters.sortBy) {
-        case 'price_asc':
-          filteredProducts.sort((a, b) => a.price - b.price);
-          break;
-        case 'price_desc':
-          filteredProducts.sort((a, b) => b.price - a.price);
-          break;
-        case 'rating_desc':
-          filteredProducts.sort((a, b) => b.rating - a.rating);
-          break;
-        case 'name_asc':
-          filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-          break;
-        case 'name_desc':
-          filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
-          break;
-        default:
-          break;
-      }
-    }
-    
-    // Apply pagination
-    const page = parseInt(filters.page) || 1;
-    const limit = parseInt(filters.limit) || 12;
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-    const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
-    
-    return {
-      data: {
-        products: paginatedProducts,
-        pagination: {
-          page,
-          limit,
-          total: filteredProducts.length,
-          totalPages: Math.ceil(filteredProducts.length / limit)
-        }
-      }
-    };
-  }
-  
-  const params = new URLSearchParams();
-  
-  // Add filters to query params
-  Object.keys(filters).forEach(key => {
-    if (filters[key] !== undefined && filters[key] !== '') {
-      if (Array.isArray(filters[key])) {
-        params.append(key, filters[key].join(','));
-      } else {
-        params.append(key, filters[key]);
-      }
-    }
-  });
-  
-  return await api.get(`/products?${params.toString()}`);
+  const params = typeof filters === 'string' ? { category: filters } : filters;
+  const response = await api.get('/products', { params });
+  return response.data.items || response.data.content || [];
 };
 
-export const getProductById = async (productId) => {
-  if (USE_MOCK_DATA) {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    const product = mockProducts.find(p => p._id === productId);
-    if (product) {
-      return { data: product };
-    } else {
-      throw new Error('Product not found');
-    }
-  }
-  
-  return await api.get(`/products/${productId}`);
-};
-
+// Get products by category
 export const getProductsByCategory = async (category, filters = {}) => {
-  const params = new URLSearchParams();
-  
-  Object.keys(filters).forEach(key => {
-    if (filters[key] !== undefined && filters[key] !== '') {
-      if (Array.isArray(filters[key])) {
-        params.append(key, filters[key].join(','));
-      } else {
-        params.append(key, filters[key]);
-      }
-    }
-  });
-  
-  return await api.get(`/products/category/${category}?${params.toString()}`);
+  const response = await api.get('/products', { params: { ...filters, category } });
+  return response.data.items || response.data.content || [];
 };
 
+// Get single product by ID
+export const getProductById = async (productId) => {
+  const response = await api.get(`/products/${productId}`);
+  return response.data;
+};
+
+// Search products
 export const searchProducts = async (searchTerm) => {
-  if (USE_MOCK_DATA) {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    const filteredProducts = mockProducts.filter(p => 
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
-    return { data: { products: filteredProducts } };
-  }
-  
-  return await api.get(`/products/search?q=${encodeURIComponent(searchTerm)}`);
+  const response = await api.get('/products', { params: { q: searchTerm } });
+  return response.data.items || response.data.content || [];
 };
 
-export const getCategories = async () => {
-  if (USE_MOCK_DATA) {
-    await new Promise(resolve => setTimeout(resolve, 200));
-    return { data: mockCategories };
-  }
-  
-  return await api.get('/products/categories');
+// Get product stock information
+export const getStock = async (_sku) => {
+  return { data: { stock: 100 } };
 };
 
-export const getFeaturedProducts = async () => {
-  return await api.get('/products/featured');
+// Get available filters
+export const getFilters = async (category) => {
+  const path = category ? `/products/filters/${category}` : '/products/filters';
+  const response = await api.get(path);
+  return response.data;
 };
 
-export const getNewArrivals = async () => {
-  return await api.get('/products/new-arrivals');
-};
+// Apply filters to products
+export const applyFilters = (products, filters) => {
+  return products.filter(product => {
+    if (filters.priceRange) {
+      const [min, max] = filters.priceRange;
+      const price = product.discountedPrice ?? product.price;
+      if (price < min || price > max) return false;
+    }
 
-export const getBestSellers = async () => {
-  return await api.get('/products/best-sellers');
-};
+    if (filters.size && filters.size.length) {
+      const sizeNames = Array.isArray(product.sizes) ? product.sizes.map(s => s.name) : [];
+      if (!filters.size.some(s => sizeNames.includes(s))) return false;
+    }
 
-export const getRelatedProducts = async (productId) => {
-  return await api.get(`/products/${productId}/related`);
-};
+    if (filters.color) {
+      if ((product.color || '').toLowerCase() !== String(filters.color).toLowerCase()) return false;
+    }
 
-// Product Reviews
-export const getProductReviews = async (productId) => {
-  return await api.get(`/products/${productId}/reviews`);
-};
-
-export const addProductReview = async (productId, reviewData) => {
-  return await api.post(`/products/${productId}/reviews`, reviewData);
-};
-
-export const updateProductReview = async (productId, reviewId, reviewData) => {
-  return await api.put(`/products/${productId}/reviews/${reviewId}`, reviewData);
-};
-
-export const deleteProductReview = async (productId, reviewId) => {
-  return await api.delete(`/products/${productId}/reviews/${reviewId}`);
-};
-
-// Admin product management
-export const createProduct = async (productData) => {
-  return await api.post('/admin/products', productData);
-};
-
-export const updateProduct = async (productId, productData) => {
-  return await api.put(`/admin/products/${productId}`, productData);
-};
-
-export const deleteProduct = async (productId) => {
-  return await api.delete(`/admin/products/${productId}`);
-};
-
-export const uploadProductImages = async (productId, images) => {
-  const formData = new FormData();
-  images.forEach(image => {
-    formData.append('images', image);
+    return true;
   });
+};
+
+// Sort products
+export const sortProducts = (products, sortBy) => {
+  const sortedProducts = [...products];
   
-  return await api.post(`/admin/products/${productId}/images`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  switch (sortBy) {
+    case 'price_asc':
+      sortedProducts.sort((a, b) => (a.discountedPrice ?? a.price) - (b.discountedPrice ?? b.price));
+      break;
+    case 'price_desc':
+      sortedProducts.sort((a, b) => (b.discountedPrice ?? b.price) - (a.discountedPrice ?? a.price));
+      break;
+    case 'stock_desc':
+      sortedProducts.sort((a, b) => b.stock - a.stock);
+      break;
+    default:
+      break;
+  }
+
+  return sortedProducts;
 };

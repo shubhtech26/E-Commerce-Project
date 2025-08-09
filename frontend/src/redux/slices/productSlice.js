@@ -6,8 +6,8 @@ export const fetchProducts = createAsyncThunk(
   'product/fetchProducts',
   async (filters = {}, { rejectWithValue }) => {
     try {
-      const response = await productService.getProducts(filters);
-      return response.data;
+      const items = await productService.getProducts(filters);
+      return { products: items };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch products');
     }
@@ -18,8 +18,8 @@ export const fetchProductById = createAsyncThunk(
   'product/fetchProductById',
   async (productId, { rejectWithValue }) => {
     try {
-      const response = await productService.getProductById(productId);
-      return response.data;
+      const product = await productService.getProductById(productId);
+      return product;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch product');
     }
@@ -30,8 +30,8 @@ export const fetchProductsByCategory = createAsyncThunk(
   'product/fetchProductsByCategory',
   async ({ category, filters = {} }, { rejectWithValue }) => {
     try {
-      const response = await productService.getProductsByCategory(category, filters);
-      return response.data;
+      const items = await productService.getProductsByCategory(category, filters);
+      return { products: items };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch products');
     }
@@ -42,8 +42,8 @@ export const searchProducts = createAsyncThunk(
   'product/searchProducts',
   async (searchTerm, { rejectWithValue }) => {
     try {
-      const response = await productService.searchProducts(searchTerm);
-      return response.data;
+      const items = await productService.searchProducts(searchTerm);
+      return { products: items };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Search failed');
     }

@@ -12,14 +12,19 @@ const ProductCard = ({ product }) => {
   const [imageLoading, setImageLoading] = useState(true);
   const { addToCart } = useCart();
 
-  const discount = calculateDiscount(product.originalPrice, product.price);
+  const original = product.price ?? 0;
+  const sale = product.discountedPrice ?? original;
+  const discount = calculateDiscount(original, sale);
+  const inStock = (product.quantity ?? 0) > 0;
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     
     try {
-      await addToCart(product, 1, product.sizes?.[0], product.colors?.[0]);
+      const defaultSize = Array.isArray(product.sizes) ? (product.sizes[0]?.name || undefined) : undefined;
+      const defaultColor = Array.isArray(product.colors) ? product.colors[0] : (product.color || undefined);
+      await addToCart(product, 1, defaultSize, defaultColor);
       toast.success('Added to cart!');
     } catch (error) {
       toast.error('Failed to add to cart');
@@ -82,8 +87,8 @@ const ProductCard = ({ product }) => {
             </div>
           )}
           <img
-            src={product.images?.[0] || '/images/placeholder.jpg'}
-            alt={product.name}
+            src={product.imageUrl || product.images?.[0] || '/logo192.png'}
+            alt={product.title || 'Product'}
             className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ${
               imageLoading ? 'opacity-0' : 'opacity-100'
             }`}
@@ -114,7 +119,7 @@ const ProductCard = ({ product }) => {
 
         {/* Product Name */}
         <h3 className="text-lg font-medium text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors overflow-hidden" style={{display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical'}}>
-          {product.name}
+          {product.title || product.name}
         </h3>
 
         {/* Rating */}
@@ -126,11 +131,11 @@ const ProductCard = ({ product }) => {
         {/* Price */}
         <div className="flex items-center space-x-2 mb-3">
           <span className="text-lg font-bold text-gray-900">
-            {formatCurrency(product.price)}
+            {formatCurrency(sale)}
           </span>
-          {product.originalPrice > product.price && (
+          {original > sale && (
             <span className="text-sm text-gray-500 line-through">
-              {formatCurrency(product.originalPrice)}
+              {formatCurrency(original)}
             </span>
           )}
         </div>
@@ -139,12 +144,10 @@ const ProductCard = ({ product }) => {
         <div className="flex items-center justify-between">
           <span
             className={`text-xs font-medium px-2 py-1 rounded-full ${
-              product.inStock
-                ? 'bg-green-100 text-green-800'
-                : 'bg-red-100 text-red-800'
+              inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
             }`}
           >
-            {product.inStock ? 'In Stock' : 'Out of Stock'}
+            {inStock ? 'In Stock' : 'Out of Stock'}
           </span>
 
           {/* Available Colors */}

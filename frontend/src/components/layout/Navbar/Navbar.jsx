@@ -10,55 +10,21 @@ import { useAuth } from '../../../hooks/useAuth';
 import { useCart } from '../../../hooks/useCart';
 
 const categories = {
-  women: {
-    name: 'Women',
-    sections: [
-      {
-        name: 'Clothing',
-        items: [
-          { name: 'Tops', href: '/products/women/tops' },
-          { name: 'Dresses', href: '/products/women/dresses' },
-          { name: 'Pants', href: '/products/women/pants' },
-          { name: 'Denim', href: '/products/women/denim' },
-          { name: 'Sweaters', href: '/products/women/sweaters' },
-          { name: 'T-Shirts', href: '/products/women/t-shirts' },
-        ],
-      },
-      {
-        name: 'Shoes',
-        items: [
-          { name: 'Sneakers', href: '/products/women/shoes/sneakers' },
-          { name: 'Flats', href: '/products/women/shoes/flats' },
-          { name: 'Heels', href: '/products/women/shoes/heels' },
-          { name: 'Boots', href: '/products/women/shoes/boots' },
-        ],
-      },
-    ],
-  },
   men: {
     name: 'Men',
-    sections: [
-      {
-        name: 'Clothing',
-        items: [
-          { name: 'Shirts', href: '/products/men/shirts' },
-          { name: 'Pants', href: '/products/men/pants' },
-          { name: 'Denim', href: '/products/men/denim' },
-          { name: 'T-Shirts', href: '/products/men/t-shirts' },
-          { name: 'Jackets', href: '/products/men/jackets' },
-        ],
-      },
-      {
-        name: 'Shoes',
-        items: [
-          { name: 'Sneakers', href: '/products/men/shoes/sneakers' },
-          { name: 'Loafers', href: '/products/men/shoes/loafers' },
-          { name: 'Boots', href: '/products/men/shoes/boots' },
-          { name: 'Athletic', href: '/products/men/shoes/athletic' },
-        ],
-      },
-    ],
+    items: [
+      { name: 'Shirts', href: '/products/shirt' },
+      { name: 'Jeans', href: '/products/men_jeans' },
+      { name: 'Kurtas', href: '/products/mens_kurta' }
+    ]
   },
+  women: {
+    name: 'Women',
+    items: [
+      { name: 'Tops', href: '/products/women_top' },
+      { name: 'Dresses', href: '/products/women_dress' }
+    ]
+  }
 };
 
 const Navbar = () => {
@@ -126,36 +92,21 @@ const Navbar = () => {
                     <ChevronDownIcon className={`ml-1 h-4 w-4 transform transition-transform duration-200 ${activeDropdown === key ? 'rotate-180' : ''}`} />
                   </button>
 
-                  {/* Dropdown Menu */}
-                  {activeDropdown === key && (
+                  {activeDropdown === key && category.items && (
                     <div 
-                      className="absolute left-0 mt-2 w-screen max-w-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 rounded-lg overflow-hidden z-[110]"
+                      className="absolute left-0 mt-2 w-48 bg-white shadow-lg ring-1 ring-black ring-opacity-5 rounded-lg overflow-hidden z-[110]"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <div className="p-4">
-                        {category.sections.map((section) => (
-                          <div key={section.name} className="mb-6 last:mb-0">
-                            <h3 className="text-sm font-medium text-gray-900 mb-3 px-2">
-                              {section.name}
-                            </h3>
-                            <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
-                              {section.items.map((item) => (
-                                <li key={item.name} className="relative">
-                                  <Link
-                                    to={item.href}
-                                    className="block text-sm text-gray-600 hover:text-indigo-600 hover:bg-gray-50 px-2 py-2 rounded transition-colors duration-150 cursor-pointer"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      setActiveDropdown(null);
-                                      window.location.href = item.href;
-                                    }}
-                                  >
-                                    {item.name}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                      <div className="py-1">
+                        {category.items.map((item) => (
+                          <Link
+                            key={item.name}
+                            to={item.href}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            {item.name}
+                          </Link>
                         ))}
                       </div>
                     </div>
@@ -215,7 +166,7 @@ const Navbar = () => {
 
       {/* Search Modal */}
       {searchOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-[150]">
           <div className="bg-white p-4 max-w-3xl mx-auto mt-20 rounded-lg">
             <div className="flex items-center border-b border-gray-300 pb-4">
               <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
@@ -232,7 +183,6 @@ const Navbar = () => {
                 Cancel
               </button>
             </div>
-            {/* Search results would go here */}
           </div>
         </div>
       )}

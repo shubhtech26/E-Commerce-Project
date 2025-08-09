@@ -1,0 +1,107 @@
+[
+  {
+    "title": "Classic Cotton Tee",
+    "description": "Soft, breathable cotton t‑shirt.",
+    "price": 999,
+    "discountedPrice": 799,
+    "discountPersent": 20,
+    "quantity": 120,
+    "brand": "House",
+    "color": "black",
+    "sizes": [{"name":"XS","quantity":10},{"name":"S","quantity":20},{"name":"M","quantity":30},{"name":"L","quantity":30},{"name":"XL","quantity":20},{"name":"XXL","quantity":10}],
+    "imageUrl": "https://via.placeholder.com/600x600.png?text=Classic+Cotton+Tee",
+    "categorySlug": "t-shirts"
+  },
+  {
+    "title": "Graphic Tee – Minimal Logo",
+    "description": "Premium tee with minimal chest print.",
+    "price": 1199,
+    "discountedPrice": 899,
+    "discountPersent": 25,
+    "quantity": 100,
+    "brand": "House",
+    "color": "white",
+    "sizes": [{"name":"XS","quantity":8},{"name":"S","quantity":18},{"name":"M","quantity":24},{"name":"L","quantity":24},{"name":"XL","quantity":18},{"name":"XXL","quantity":8}],
+    "imageUrl": "https://via.placeholder.com/600x600.png?text=Graphic+Tee",
+    "categorySlug": "t-shirts"
+  },
+  {
+    "title": "Oversized Hoodie",
+    "description": "Fleece lined oversized hoodie.",
+    "price": 2499,
+    "discountedPrice": 1999,
+    "discountPersent": 20,
+    "quantity": 90,
+    "brand": "House",
+    "color": "olive",
+    "sizes": [{"name":"S","quantity":15},{"name":"M","quantity":25},{"name":"L","quantity":25},{"name":"XL","quantity":15},{"name":"XXL","quantity":10}],
+    "imageUrl": "https://via.placeholder.com/600x600.png?text=Oversized+Hoodie",
+    "categorySlug": "hoodies"
+  },
+  {
+    "title": "Zip Hoodie",
+    "description": "Everyday zip‑through hoodie with pockets.",
+    "price": 2299,
+    "discountedPrice": 1799,
+    "discountPersent": 22,
+    "quantity": 80,
+    "brand": "House",
+    "color": "navy",
+    "sizes": [{"name":"S","quantity":12},{"name":"M","quantity":22},{"name":"L","quantity":22},{"name":"XL","quantity":14},{"name":"XXL","quantity":10}],
+    "imageUrl": "https://via.placeholder.com/600x600.png?text=Zip+Hoodie",
+    "categorySlug": "hoodies"
+  },
+  {
+    "title": "Tapered Joggers",
+    "description": "Stretch cotton joggers with cuffed ankle.",
+    "price": 1799,
+    "discountedPrice": 1399,
+    "discountPersent": 22,
+    "quantity": 110,
+    "brand": "House",
+    "color": "gray",
+    "sizes": [{"name":"XS","quantity":10},{"name":"S","quantity":20},{"name":"M","quantity":30},{"name":"L","quantity":30},{"name":"XL","quantity":15},{"name":"XXL","quantity":5}],
+    "imageUrl": "https://via.placeholder.com/600x600.png?text=Tapered+Joggers",
+    "categorySlug": "joggers"
+  },
+  {
+    "title": "Utility Joggers",
+    "description": "Cargo‑style joggers with utility pockets.",
+    "price": 1999,
+    "discountedPrice": 1599,
+    "discountPersent": 20,
+    "quantity": 95,
+    "brand": "House",
+    "color": "black",
+    "sizes": [{"name":"S","quantity":15},{"name":"M","quantity":25},{"name":"L","quantity":25},{"name":"XL","quantity":20},{"name":"XXL","quantity":10}],
+    "imageUrl": "https://via.placeholder.com/600x600.png?text=Utility+Joggers",
+    "categorySlug": "joggers"
+  },
+  {
+    "title": "Classic Cap",
+    "description": "Curved brim, adjustable strap.",
+    "price": 799,
+    "discountedPrice": 599,
+    "discountPersent": 25,
+    "quantity": 150,
+    "brand": "House",
+    "color": "black",
+    "sizes": [{"name":"one-size","quantity":150}],
+    "imageUrl": "https://via.placeholder.com/600x600.png?text=Classic+Cap",
+    "categorySlug": "caps"
+  },
+  {
+    "title": "Washed Denim Cap",
+    "description": "Washed look cap with metal buckle.",
+    "price": 899,
+    "discountedPrice": 699,
+    "discountPersent": 22,
+    "quantity": 140,
+    "brand": "House",
+    "color": "navy",
+    "sizes": [{"name":"one-size","quantity":140}],
+    "imageUrl": "https://via.placeholder.com/600x600.png?text=Denim+Cap",
+    "categorySlug": "caps"
+  }
+]
+

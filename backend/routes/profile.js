@@ -1,22 +1,25 @@
 import express from 'express';
+import jwt from 'jsonwebtoken';
+import User from '../models/userModel.js';
 
 const router = express.Router();
 
-//authCheck: user can access its significant dashboard only 
-const authCheck = (req, res, next) => {
-    if(!req.user) {
-        //if user is not logged in, redirect to login page
-        res.redirect('/auth/login');
-    } else {
-        //if logged in
-        next();
-    }
-};
+function requireAuth(req, res, next) {
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+  if (!token) return res.status(401).json({ message: 'Unauthorized' });
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret');
+    req.user = payload;
+    next();
+  } catch (e) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+}
 
-
-router.get('/', authCheck, (req, res) => {
-    res.send('You are logged In' + req.user.username);
-    //TODO res.render('profile', { user: req.user });
+router.get('/', requireAuth, async (req, res) => {
+  const user = await User.findById(req.user.id).select('-passwordHash');
+  return res.json(user);
 });
 
 export default router;
