@@ -12,6 +12,7 @@ import cors from 'cors';
 import seedRoutes from './routes/seed.js';
 import cartRoutes from './routes/cartRoutes.js';
 import orderRoutes from './routes/orders.js';
+import aiRoutes from './routes/ai.js';
 
 // Create Express app
 const app = express();
@@ -53,6 +54,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/admin/products', productAdminRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/ai', aiRoutes);
 app.use('/api/seed', seedRoutes);
 
 // Health
